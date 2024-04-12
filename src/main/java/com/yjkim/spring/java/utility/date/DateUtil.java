@@ -8,14 +8,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
 /**
  * Date 유틸리티
- *
+ * <p>
  * import 라이브러리
- *    - https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+ * - https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
  */
 public class DateUtil
 {
@@ -25,7 +26,7 @@ public class DateUtil
      * @param date
      * @return
      */
-    public static int getYear(Date date)
+    public static int getYear (Date date)
     {
         Calendar tcal = Calendar.getInstance();
         tcal.setTime(date);
@@ -38,7 +39,7 @@ public class DateUtil
      * @param date
      * @return
      */
-    public static int getMonth(Date date)
+    public static int getMonth (Date date)
     {
         Calendar tcal = Calendar.getInstance();
         tcal.setTime(date);
@@ -51,7 +52,7 @@ public class DateUtil
      * @param date
      * @return
      */
-    public static int getDay(Date date)
+    public static int getDay (Date date)
     {
         Calendar tcal = Calendar.getInstance();
         tcal.setTime(date);
@@ -64,7 +65,7 @@ public class DateUtil
      * @param date
      * @return
      */
-    public static int getHour(Date date)
+    public static int getHour (Date date)
     {
         Calendar tcal = Calendar.getInstance();
         tcal.setTime(date);
@@ -77,7 +78,7 @@ public class DateUtil
      * @param date
      * @return
      */
-    public static int getMinute(Date date)
+    public static int getMinute (Date date)
     {
         Calendar tcal = Calendar.getInstance();
         tcal.setTime(date);
@@ -90,7 +91,7 @@ public class DateUtil
      * @param date
      * @return
      */
-    public static int getSecond(Date date)
+    public static int getSecond (Date date)
     {
         Calendar tcal = Calendar.getInstance();
         tcal.setTime(date);
@@ -103,7 +104,7 @@ public class DateUtil
      * @param date
      * @return
      */
-    public static int getMilliSecond(Date date)
+    public static int getMilliSecond (Date date)
     {
         Calendar tcal = Calendar.getInstance();
         tcal.setTime(date);
@@ -116,7 +117,7 @@ public class DateUtil
      * @param amount int
      * @return DateUtil
      */
-    public static Date yearAdd(Date date, int amount)
+    public static Date yearAdd (Date date, int amount)
     {
         Calendar tcal = Calendar.getInstance();
         tcal.setTime(date);
@@ -130,7 +131,7 @@ public class DateUtil
      * @param amount int
      * @return DateUtil
      */
-    public static Date monthAdd(Date date, int amount)
+    public static Date monthAdd (Date date, int amount)
     {
         Calendar tcal = Calendar.getInstance();
         tcal.setTime(date);
@@ -144,7 +145,7 @@ public class DateUtil
      * @param amount int
      * @return DateUtil
      */
-    public static Date dayAdd(Date date, int amount)
+    public static Date dayAdd (Date date, int amount)
     {
         Calendar tcal = Calendar.getInstance();
         tcal.setTime(date);
@@ -158,7 +159,7 @@ public class DateUtil
      * @param amount int
      * @return DateUtil
      */
-    public static Date hourAdd(Date date, int amount)
+    public static Date hourAdd (Date date, int amount)
     {
         Calendar tcal = Calendar.getInstance();
         tcal.setTime(date);
@@ -172,7 +173,7 @@ public class DateUtil
      * @param amount int
      * @return DateUtil
      */
-    public static Date minuteAdd(Date date, int amount)
+    public static Date minuteAdd (Date date, int amount)
     {
         Calendar tcal = Calendar.getInstance();
         tcal.setTime(date);
@@ -188,7 +189,7 @@ public class DateUtil
      * @return Date
      * @throws ParseException
      */
-    public static Date parseDate(String value, String pattern) throws ParseException
+    public static Date parseDate (String value, String pattern) throws ParseException
     {
         Calendar tcal = Calendar.getInstance();
         if (value == null || "".equals(value.trim()))
@@ -209,7 +210,7 @@ public class DateUtil
      * @return Date
      * @throws ParseException
      */
-    public static Date parseDate(String value, String pattern, Locale locale) throws ParseException
+    public static Date parseDate (String value, String pattern, Locale locale) throws ParseException
     {
         Calendar tcal = Calendar.getInstance();
         if (value == null || "".equals(value.trim()))
@@ -228,7 +229,7 @@ public class DateUtil
      * @param pattern String
      * @return String
      */
-    public static String formatDate(Date date, String pattern)
+    public static String formatDate (Date date, String pattern)
     {
         Calendar tcal = Calendar.getInstance();
         tcal.setTime(date);
@@ -244,7 +245,7 @@ public class DateUtil
      * @param locale  Locale
      * @return String
      */
-    public static String formatDate(Date date, String pattern, Locale locale)
+    public static String formatDate (Date date, String pattern, Locale locale)
     {
         Calendar tcal = Calendar.getInstance();
         tcal.setTime(date);
@@ -259,7 +260,7 @@ public class DateUtil
      * @param month int
      * @return int
      */
-    public static int getLastDayOfMonth(int year, int month)
+    public static int getLastDayOfMonth (int year, int month)
     {
         Calendar tcal = Calendar.getInstance();
         tcal.set(Calendar.DATE, 1);
@@ -276,7 +277,7 @@ public class DateUtil
      * @param minutes 분 단위
      * @return {@param minutes} 단위로 나눈 Date 리스트
      */
-    public static List<Date> getDatesInMinutes(Date start, Date end, int minutes)
+    public static List<Date> getDatesInMinutes (Date start, Date end, int minutes)
     {
         long startTime = start.getTime();
         long endTime = end.getTime();
@@ -300,7 +301,7 @@ public class DateUtil
      * @param dayNum  n번째 요일
      * @return 특정 년도 n주차 n번째 요일에 해당하는 날짜
      */
-    public static Date getDateByWeekAndDayNum(Integer year, int weekNum, int dayNum)
+    public static Date getDateByWeekAndDayNum (Integer year, int weekNum, int dayNum)
     {
 
         if (ObjectUtils.isEmpty(year))
@@ -320,7 +321,7 @@ public class DateUtil
      * @param date 특정 날짜
      * @return 현재 연도의 해당 주차
      */
-    public static Integer getWeekNumByDate(Date date)
+    public static Integer getWeekNumByDate (Date date)
     {
         if (ObjectUtils.isEmpty(date))
         {
@@ -339,7 +340,7 @@ public class DateUtil
      * @param date  Date
      * @return long
      */
-    public static long diff(int field, Date date)
+    public static long diff (int field, Date date)
     {
         return DateUtil.diff(field, new Date(), date);
     }
@@ -352,36 +353,36 @@ public class DateUtil
      * @param date2 Date
      * @return long
      */
-    public static long diff(int field, Date date1, Date date2)
+    public static long diff (int field, Date date1, Date date2)
     {
         long date1Time = DateUtils.truncate(date1, field).getTime();
         long date2Time = DateUtils.truncate(date2, field).getTime();
         long diffTime = date1Time - date2Time;
 
         return switch (field)
+        {
+            case Calendar.MILLISECOND -> diffTime;
+            case Calendar.MONTH ->
             {
-                case Calendar.MILLISECOND -> diffTime;
-                case Calendar.MONTH ->
+                int year1 = DateUtil.getYear(date1);
+                int year2 = DateUtil.getYear(date2);
+                int month1 = DateUtil.getMonth(date1);
+                int month2 = DateUtil.getMonth(date2);
+                if (year1 == year2)
                 {
-                    int year1 = DateUtil.getYear(date1);
-                    int year2 = DateUtil.getYear(date2);
-                    int month1 = DateUtil.getMonth(date1);
-                    int month2 = DateUtil.getMonth(date2);
-                    if (year1 == year2)
-                    {
-                        yield month1 - month2;
-                    }
-                    yield ((year1 - year2 - 1) * 12L) + (12 - month2) + month1;
+                    yield month1 - month2;
                 }
-                case Calendar.YEAR ->
-                {
+                yield ((year1 - year2 - 1) * 12L) + (12 - month2) + month1;
+            }
+            case Calendar.YEAR ->
+            {
 
-                    int year1 = DateUtil.getYear(date1);
-                    int year2 = DateUtil.getYear(date2);
-                    yield year1 - year2;
-                }
-                default -> diffTime / field;
-            };
+                int year1 = DateUtil.getYear(date1);
+                int year2 = DateUtil.getYear(date2);
+                yield year1 - year2;
+            }
+            default -> diffTime / field;
+        };
     }
 
     /**
@@ -391,7 +392,7 @@ public class DateUtil
      * @param pattern
      * @return
      */
-    public static int getAge(String birthDayStr, String pattern)
+    public static int getAge (String birthDayStr, String pattern)
     {
         try
         {
@@ -408,7 +409,7 @@ public class DateUtil
      * @param birthDay
      * @return
      */
-    public static int getAge(Date birthDay)
+    public static int getAge (Date birthDay)
     {
         return DateUtil.getAge(DateConvertUtil.convertDateToLocalDate(birthDay));
     }
@@ -419,7 +420,7 @@ public class DateUtil
      * @param birthDay
      * @return
      */
-    public static int getAge(LocalDate birthDay)
+    public static int getAge (LocalDate birthDay)
     {
         return DateUtil.getAge(birthDay.getYear(), birthDay.getMonthValue(), birthDay.getDayOfMonth());
     }
@@ -432,7 +433,7 @@ public class DateUtil
      * @param birthD
      * @return
      */
-    public static int getAge(int birthY, int birthM, int birthD)
+    public static int getAge (int birthY, int birthM, int birthD)
     {
         Calendar current = Calendar.getInstance();
         int currentYear = current.get(Calendar.YEAR);

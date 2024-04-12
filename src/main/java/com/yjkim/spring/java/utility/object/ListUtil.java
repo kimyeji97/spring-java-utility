@@ -1,29 +1,28 @@
 package com.yjkim.spring.java.utility.object;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.ObjectUtils;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
+/**
+ * List 타입관련 유틸리티
+ */
 public class ListUtil
 {
+
+    public ListUtil ()
+    {
+        throw new IllegalStateException("ListUtil is utility class.");
+    }
 
     @FunctionalInterface
     public interface BaseProcessor<T>
     {
-        void process(List<T> list);
-    }
-
-    public static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor)
-    {
-        Map<Object, Boolean> map = new HashMap<>();
-        return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+        void process (List<T> list);
     }
 
     /**
@@ -34,7 +33,7 @@ public class ListUtil
      * @param size
      * @return
      */
-    public static <T> Collection<List<T>> partitionBasedOnSize(List<T> list, int size)
+    public static <T> Collection<List<T>> partitionBasedOnSize (List<T> list, int size)
     {
         final AtomicInteger counter = new AtomicInteger(0);
         return list.stream().collect(Collectors.groupingBy(s -> counter.getAndIncrement() / size)).values();
@@ -49,7 +48,7 @@ public class ListUtil
      * @param baseProcessor
      * @return
      */
-    public static <T> boolean partitionBasedOnSize(List<T> list, int size, BaseProcessor<T> baseProcessor)
+    public static <T> boolean partitionBasedOnSize (List<T> list, int size, BaseProcessor<T> baseProcessor)
     {
         if (ObjectUtils.isEmpty(list))
         {
@@ -79,7 +78,7 @@ public class ListUtil
      * @param <T>
      * @return
      */
-    public static <T> List<T> makeMergedList(List<T> toList, List<T> fromList)
+    public static <T> List<T> makeMergedList (List<T> toList, List<T> fromList)
     {
         List<T> result = new ArrayList<>();
 
@@ -103,7 +102,7 @@ public class ListUtil
      * @param formList
      * @param <T>
      */
-    public static <T> void mergeAddAll(List<T> toList, List<T> formList)
+    public static <T> void mergeAddAll (List<T> toList, List<T> formList)
     {
         if (toList == null || ObjectUtils.isEmpty(formList))
         {
