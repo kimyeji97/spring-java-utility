@@ -6,8 +6,6 @@ Spring boot 기반 Java utility 모음
 
 ## 👩🏻‍💻 Development environment
 
-------
-
 | items       | version |
 |-------------|---------|
 | Java        | 17      |
@@ -16,7 +14,6 @@ Spring boot 기반 Java utility 모음
 
 ## 📦 Packages
 
------
 
 ### [string](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fstring)
 - 문자 관련 패키지
