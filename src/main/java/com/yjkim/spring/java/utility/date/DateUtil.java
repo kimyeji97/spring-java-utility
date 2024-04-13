@@ -1,16 +1,15 @@
 package com.yjkim.spring.java.utility.date;
 
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.time.DateUtils;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.time.DateUtils;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 /**
  * Date 유틸리티
@@ -254,6 +253,42 @@ public class DateUtil
     }
 
     /**
+     * 날자값을 지정된 패턴으로 출력한다.
+     *
+     * @param date    Date
+     * @param pattern String
+     * @return String
+     */
+    public static String formatDate (LocalDate date, String pattern)
+    {
+        return date.format(DateTimeFormatter.ofPattern(pattern));
+    }
+
+    /**
+     * 날자값을 지정된 패턴으로 출력한다.
+     *
+     * @param date    Date
+     * @param pattern String
+     * @return String
+     */
+    public static String formatDate (LocalDateTime date, String pattern)
+    {
+        return date.format(DateTimeFormatter.ofPattern(pattern));
+    }
+
+    /**
+     * 시간값을 지정된 패턴으로 출력한다.
+     *
+     * @param time    time
+     * @param pattern String
+     * @return String
+     */
+    public static String formatDate (LocalTime time, String pattern)
+    {
+        return time.format(DateTimeFormatter.ofPattern(pattern));
+    }
+
+    /**
      * 지정된 년도와 월의 마지막일을 반환한다.
      *
      * @param year  int
@@ -411,7 +446,7 @@ public class DateUtil
      */
     public static int getAge (Date birthDay)
     {
-        return DateUtil.getAge(DateConvertUtil.convertDateToLocalDate(birthDay));
+        return DateUtil.getAge(DateUtil.getYear(birthDay), DateUtil.getMonth(birthDay), DateUtil.getDay(birthDay));
     }
 
     /**

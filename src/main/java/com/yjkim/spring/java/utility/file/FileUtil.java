@@ -19,6 +19,7 @@ import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -29,13 +30,18 @@ import org.apache.commons.lang3.StringUtils;
 @Slf4j
 public class FileUtil
 {
+    public FileUtil ()
+    {
+        throw new IllegalStateException("FileUtil is utility class.");
+    }
+
     /**
      * 파일의 확장자를 추출한다.
      *
      * @param file_name 파일명
      * @return 파일 확장자명
      */
-    public static String getExtension(String file_name)
+    public static String getExtension (String file_name)
     {
         if (file_name != null && !file_name.trim().equals(""))
         {
@@ -66,7 +72,7 @@ public class FileUtil
      * @param dest_fp 복사 대상 파일
      * @return 성공여부 (boolean)
      */
-    public static boolean copy(File src_fp, File dest_fp)
+    public static boolean copy (File src_fp, File dest_fp)
     {
         FileInputStream in = null;
         FileOutputStream out = null;
@@ -158,7 +164,7 @@ public class FileUtil
      * @param dest_fp 이동 대상 파일
      * @return 성공여부 (boolean)
      */
-    public static boolean move(File src_fp, File dest_fp)
+    public static boolean move (File src_fp, File dest_fp)
     {
         if (src_fp.renameTo(dest_fp))
         {
@@ -190,7 +196,7 @@ public class FileUtil
      * @param path 이동 대상 Path
      * @return 성공여부 (boolean)
      */
-    public static boolean move(File fp, String path)
+    public static boolean move (File fp, String path)
     {
         File new_fp = new File(path);
         if (fp.renameTo(new_fp))
@@ -222,7 +228,7 @@ public class FileUtil
      * @param path 생성할 디렉토리 path
      * @return 성공여부 (boolean)
      */
-    public static boolean makeDirs(String path)
+    public static boolean makeDirs (String path)
     {
         if (path == null)
         {
@@ -243,7 +249,7 @@ public class FileUtil
      * @param create true이면 하위 디렉토리가 없다면 생성하고, false면 생성하지 않는다.
      * @return 성공여부 (boolean)
      */
-    public static boolean makeDir(String path, boolean create)
+    public static boolean makeDir (String path, boolean create)
     {
         if (path == null)
         {
@@ -270,7 +276,7 @@ public class FileUtil
      * @param file 삭제할 파일 path
      * @return 성공여부 (boolean)
      */
-    public static boolean remove(String file)
+    public static boolean remove (String file)
     {
         if (file == null)
         {
@@ -291,7 +297,7 @@ public class FileUtil
      * @param fp 삭제할 파일
      * @return 성공여부 (boolean)
      */
-    public static boolean remove(File fp)
+    public static boolean remove (File fp)
     {
         if (fp != null && fp.exists())
         {
@@ -306,7 +312,7 @@ public class FileUtil
      * @param file 확인할 파일 Path
      * @return 존재 여부 (boolean)
      */
-    public static boolean exists(String file)
+    public static boolean exists (String file)
     {
         if (file == null)
         {
@@ -322,7 +328,7 @@ public class FileUtil
      * @param file 확인할 파일 Path
      * @return 파일크기
      */
-    public static long size(String file)
+    public static long size (String file)
     {
         if (file == null)
         {
@@ -342,7 +348,7 @@ public class FileUtil
      * @param fp 확인할 파일
      * @return 체크섬 byte
      */
-    public static byte[] getMd5(File fp)
+    public static byte[] getMd5 (File fp)
     {
         MessageDigest md = null;
         BufferedInputStream in = null;
@@ -386,7 +392,7 @@ public class FileUtil
      * @param filePath 확인할 파일 Path
      * @return 체크섬 byte
      */
-    public static byte[] getMd5(String filePath)
+    public static byte[] getMd5 (String filePath)
     {
         MessageDigest md = null;
         BufferedInputStream in = null;
@@ -430,7 +436,7 @@ public class FileUtil
      * @param path 확인할 파일 Path
      * @return 파일 내용 byte
      */
-    public static byte[] toBytes(String path) throws Exception
+    public static byte[] toBytes (String path) throws Exception
     {
         if (path == null)
         {
@@ -473,7 +479,7 @@ public class FileUtil
      * @param in 확인할 파일의 InputStream
      * @return 파일 내용 byte
      */
-    public static byte[] streamToBytes(InputStream in) throws IOException
+    public static byte[] streamToBytes (InputStream in) throws IOException
     {
         ByteArrayOutputStream bao = null;
         byte[] buffer = new byte[8192];
@@ -512,7 +518,7 @@ public class FileUtil
      * @param fp 확인할 파일
      * @return 파일 내용 byte
      */
-    public static byte[] fileToBytes(File fp) throws IOException
+    public static byte[] fileToBytes (File fp) throws IOException
     {
         ByteArrayOutputStream bao = null;
         byte[] buffer = new byte[8192];
@@ -551,7 +557,7 @@ public class FileUtil
      * @param fp 확인할 파일
      * @return 파일 내용
      */
-    public static String fileToString(File fp) throws IOException
+    public static String fileToString (File fp) throws IOException
     {
         return fileToString(fp, Charset.forName("UTF-8"));
     }
@@ -563,7 +569,7 @@ public class FileUtil
      * @param charset charset
      * @return 파일 내용
      */
-    public static String fileToString(File fp, Charset charset) throws IOException
+    public static String fileToString (File fp, Charset charset) throws IOException
     {
         ByteArrayOutputStream bao = null;
         byte[] buffer = new byte[8192];
@@ -602,7 +608,7 @@ public class FileUtil
      * @param path  저장할 파일 path
      * @param bytes 파일의 내용
      */
-    public static void saveBytesToFile(String path, byte[] bytes) throws Exception
+    public static void saveBytesToFile (String path, byte[] bytes) throws Exception
     {
         saveBytesToFile(path, bytes, false);
     }
@@ -614,7 +620,7 @@ public class FileUtil
      * @param bytes  파일의 내용
      * @param append 존재하는 파일에 내용을 append 할지 여부
      */
-    public static void saveBytesToFile(String path, byte[] bytes, boolean append) throws Exception
+    public static void saveBytesToFile (String path, byte[] bytes, boolean append) throws Exception
     {
         if (path == null)
         {
@@ -647,7 +653,7 @@ public class FileUtil
      * @param path 저장할 파일 path
      * @param in   파일 InputStream
      */
-    public static void saveStreamToFile(String path, InputStream in) throws IOException
+    public static void saveStreamToFile (String path, InputStream in) throws IOException
     {
         if (in == null)
         {
@@ -701,7 +707,7 @@ public class FileUtil
      *
      * @param in 파일 InputStream
      */
-    public static void closeStream(InputStream in)
+    public static void closeStream (InputStream in)
     {
         try
         {
@@ -720,7 +726,7 @@ public class FileUtil
      *
      * @param out 파일 OutputStream
      */
-    public static void closeStream(OutputStream out)
+    public static void closeStream (OutputStream out)
     {
         try
         {
@@ -748,7 +754,7 @@ public class FileUtil
      *
      * @param in 파일 Reader
      */
-    public static void closeStream(Reader in)
+    public static void closeStream (Reader in)
     {
         try
         {
@@ -767,7 +773,7 @@ public class FileUtil
      *
      * @param out 파일 Writer
      */
-    public static void closeStream(Writer out)
+    public static void closeStream (Writer out)
     {
         try
         {
@@ -795,7 +801,7 @@ public class FileUtil
      *
      * @param path 변경할 Path
      */
-    public static String convertPathToUnixFormat(String path)
+    public static String convertPathToUnixFormat (String path)
     {
         if (path == null)
         {
@@ -817,7 +823,7 @@ public class FileUtil
      * @param filter
      * @return
      */
-    public static File[] readFiles(String path, FilenameFilter filter)
+    public static File[] readFiles (String path, FilenameFilter filter)
     {
         if (StringUtils.isEmpty(path))
         {
@@ -852,7 +858,7 @@ public class FileUtil
      * @param type
      * @param desc
      */
-    public static void sortFiles(File[] files, String type, boolean desc)
+    public static void sortFiles (File[] files, String type, boolean desc)
     {
         if (ObjectUtils.isEmpty(files) || files.length == 1)
         {
@@ -863,7 +869,7 @@ public class FileUtil
         {
 
             @Override
-            public int compare(File arg0, File arg1)
+            public int compare (File arg0, File arg1)
             {
                 String s1 = "";
                 String s2 = "";
@@ -897,7 +903,7 @@ public class FileUtil
      * @param listFile
      * @throws IOException
      */
-    public static void moveFiles(String path, List<File> listFile)
+    public static void moveFiles (String path, List<File> listFile)
     {
         if (StringUtils.isEmpty(path))
         {
@@ -935,7 +941,7 @@ public class FileUtil
      * @param path
      * @param file
      */
-    public static void moveFile(String path, File file)
+    public static void moveFile (String path, File file)
     {
         if (StringUtils.isEmpty(path))
         {
