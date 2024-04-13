@@ -1,5 +1,6 @@
 package com.yjkim.spring.java.utility.object;
 
+import com.sun.jdi.InternalException;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.ArrayList;
@@ -110,5 +111,32 @@ public class ListUtil
         }
 
         toList.addAll(formList);
+    }
+
+    /**
+     * List에서 해당 index에 존재하는 값을 Object로 리턴
+     *
+     * @param list  리스트
+     * @param index 반환 인덱스
+     * @param <T>   리스트 요소 타입
+     * @return 반환 인덱스의 값
+     */
+    public static <T> Object findListValueByIndex (List<T> list, Integer index)
+    {
+        if (ObjectUtils.isEmpty(list))
+        {
+            throw new InternalException("The find target list is empty.");
+        }
+
+        if (ObjectUtils.isEmpty(index))
+        {
+            throw new InternalException("The index is empty.");
+        }
+
+        if (list.size() <= index)
+        {
+            throw new InternalException("index more then list size.");
+        }
+        return list.get(index);
     }
 }
