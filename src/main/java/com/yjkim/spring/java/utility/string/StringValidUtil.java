@@ -1,9 +1,10 @@
 package com.yjkim.spring.java.utility.string;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * String 유효성 검증 유틸리티
@@ -13,15 +14,18 @@ import org.apache.commons.lang3.StringUtils;
 @Slf4j
 public class StringValidUtil
 {
-
+    // URL 패
+    private static final Pattern PATTERN_URL = Pattern.compile("^((http(s)?|ftp):\\/\\/)?+((([^\\/:]\\S+\\.)?([[^\\/.:]&&\\S]+)?+)(:(\\p{Digit}+))?+)?+(\\/([\\S&&[^\\?#]])*)?(\\??(&?[\\S&&[^&=#]]+=?[\\S&&[^&=#]]+)*)?(#.*)?$");
     // HEX color 패턴
     private static final Pattern HEX_COLOR_PATTERN = Pattern.compile("^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$");
     // 이메일 패턴
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$");
+    // 우편번호 패턴
+    private static final Pattern PATTERN_ZIP = Pattern.compile("^(\\d\\d\\d)?([-])?(\\d\\d\\d)?$");
 
     private static final String ZERO_TO_255 = "(\\d{1,2}|(0|1)\\d{2}|2[0-4]\\d|25[0-5])";
     private static final Pattern IP_PATTERN = Pattern.compile(
-        ZERO_TO_255 + "\\." + ZERO_TO_255 + "\\." + ZERO_TO_255 + "\\." + ZERO_TO_255);
+            ZERO_TO_255 + "\\." + ZERO_TO_255 + "\\." + ZERO_TO_255 + "\\." + ZERO_TO_255);
 
     /**
      * 유효한 이메일 문자열인지 반환
@@ -29,7 +33,7 @@ public class StringValidUtil
      * @param email
      * @return
      */
-    public static boolean isValidEmail(String email)
+    public static boolean isValidEmail (String email)
     {
         boolean result = true;
         if (email == null || isWhiteSpace(email))
@@ -51,7 +55,7 @@ public class StringValidUtil
      * @param pwd 비밀번호
      * @return 판별여부
      */
-    public static boolean isWhiteSpace(String pwd)
+    public static boolean isWhiteSpace (String pwd)
     {
         String regex = "\\s";
         return Pattern.compile(regex).matcher(pwd).find();
@@ -63,7 +67,7 @@ public class StringValidUtil
      * @param pwd 비밀번호
      * @return 판별여부
      */
-    public static boolean isDigit(String pwd)
+    public static boolean isDigit (String pwd)
     {
         String regex = "[0-9]";
         return Pattern.compile(regex).matcher(pwd).find();
@@ -75,7 +79,7 @@ public class StringValidUtil
      * @param str
      * @return 판별여부
      */
-    public static boolean isIncludeChar(String str)
+    public static boolean isIncludeChar (String str)
     {
         String regex = "[a-zA-Z]";
         return Pattern.compile(regex).matcher(str).find();
@@ -87,7 +91,7 @@ public class StringValidUtil
      * @param str
      * @return 판별여부
      */
-    public static boolean isIncludeSPChar(String str)
+    public static boolean isIncludeSPChar (String str)
     {
         String regex = "^[0-9|a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣]*$";
         return !Pattern.compile(regex).matcher(str).find();
@@ -99,7 +103,7 @@ public class StringValidUtil
      * @param str
      * @return 판별여부
      */
-    public static boolean isIncludeContinuous(String str)
+    public static boolean isIncludeContinuous (String str)
     {
         int len = str.length();
         boolean check = false;
@@ -135,7 +139,7 @@ public class StringValidUtil
      * @param pwd 비밀번호
      * @return 판별여부
      */
-    public static boolean isInclude3Same(String pwd)
+    public static boolean isInclude3Same (String pwd)
     {
         String regex = "(\\w)\\1\\1";
         return Pattern.compile(regex).matcher(pwd).find();
@@ -148,7 +152,7 @@ public class StringValidUtil
      * @param maxLen
      * @return
      */
-    public static boolean checkMaxLength(String str, int maxLen)
+    public static boolean checkMaxLength (String str, int maxLen)
     {
         if (StringUtils.isBlank(str))
         {
@@ -164,7 +168,7 @@ public class StringValidUtil
      * @param minLen
      * @return
      */
-    public static boolean checkMinLength(String str, int minLen)
+    public static boolean checkMinLength (String str, int minLen)
     {
         if (StringUtils.isBlank(str) && minLen < 1)
         {
@@ -179,7 +183,7 @@ public class StringValidUtil
      * @param colorCode
      * @return
      */
-    public static boolean isHexColorCode(String colorCode)
+    public static boolean isHexColorCode (String colorCode)
     {
         if (colorCode == null || colorCode.isBlank())
         {
@@ -192,7 +196,7 @@ public class StringValidUtil
     /**
      * IP 패턴이 맞는지 체크한다.
      */
-    public static Boolean checkIpPattern(String str)
+    public static Boolean checkIpPattern (String str)
     {
         if (StringUtils.isEmpty(str))
         {
@@ -200,5 +204,27 @@ public class StringValidUtil
         }
 
         return IP_PATTERN.matcher(str).matches();
+    }
+
+    /**
+     * 우편번호 패턴 데이터인지 확인한다.
+     *
+     * @param zip 원문 데이터
+     * @return boolean 우편번호 패턴 체크 여부
+     */
+    public static boolean isValidZip (String zip)
+    {
+        return PATTERN_ZIP.matcher(zip).matches();
+    }
+
+    /**
+     * String 데이터가 URL 데이터인지 확인한다.
+     *
+     * @param url 확인 할 데이터
+     * @return boolean URL 데이터 여부
+     */
+    public static boolean isValidURL (String url)
+    {
+        return PATTERN_URL.matcher(url).matches();
     }
 }

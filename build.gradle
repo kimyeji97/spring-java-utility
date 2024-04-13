@@ -39,6 +39,12 @@ dependencies {
     // https://mvnrepository.com/artifact/com.google.guava/guava
     implementation 'com.google.guava:guava:32.1.2-jre'
 
+    // jackson
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.17.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.17.0'
+
+
 }
 
 tasks.named('test') {
