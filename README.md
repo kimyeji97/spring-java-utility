@@ -44,6 +44,25 @@ Spring boot 기반 Java utility 모음
 | [DateConvertUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fdate%2FDateConvertUtil.java) |    |
 | [DateValidUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fdate%2FDateValidUtil.java)     |    |
 
+### [list](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Flist)
+
+- 배열, 리스트 객체 관련 패키지
+
+| util                                                                                                  | 설명 |
+|-------------------------------------------------------------------------------------------------------|----|
+| [ArraysUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Flist%2FArraysUtil.java) |    |
+| [ListUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Flist%2FListUtil.java)     |    |
+
+### [map](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fmap)
+
+- Map 객체 관련 패키지
+
+| util                                                                                                           | 설명 |
+|----------------------------------------------------------------------------------------------------------------|----|
+| [MapUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fmap%2FMapUtil.java)                 |    |
+| [MultiKeyHashMap.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fmap%2FMultiKeyHashMap.java) |    |
+| [MultiKeyTreeMap.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fmap%2FMultiKeyTreeMap.java) |    |
+
 ### [json](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fjson)
 
 - JSON 객체 관련 패키지
@@ -57,16 +76,11 @@ Spring boot 기반 Java utility 모음
 
 - 다양한 객체 관련 패키지 (List, Arrays, Collection, Stream, Map 등)
 
-| util                                                                                                              | 설명 |
-|-------------------------------------------------------------------------------------------------------------------|----|
-| [ArraysUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fobject%2FArraysUtil.java)           |    |
-| [CollectionUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fobject%2FCollectionUtil.java)   |    |
-| [ListUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fobject%2FListUtil.java)               |    |
-| [MapUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fobject%2FMapUtil.java)                 |    |
-| [MultiKeyHashMap.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fobject%2FMultiKeyHashMap.java) |    |
-| [MultiKeyTreeMap.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fobject%2FMultiKeyTreeMap.java) |    |
-| [StreamUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fobject%2FStreamUtil.java)           |    |
-| [ReflectionUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fobject%2FReflectionUtil.java)   |    |
+| util                                                                                                            | 설명 |
+|-----------------------------------------------------------------------------------------------------------------|----|
+| [CollectionUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fobject%2FCollectionUtil.java) |    |
+| [StreamUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fobject%2FStreamUtil.java)         |    |
+| [ReflectionUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fobject%2FReflectionUtil.java) |    |
 
 ### [encrypt](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fencrypt)
 
