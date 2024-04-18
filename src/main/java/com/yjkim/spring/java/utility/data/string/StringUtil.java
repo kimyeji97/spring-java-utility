@@ -26,6 +26,18 @@ public class StringUtil
     }
 
     /**
+     * value 값에 '0' 문자열을 길이만큼 채운다.
+     *
+     * @param value     값
+     * @param zeroCount 채울 0의 길이
+     * @return String 0 이 append 된 문자열
+     */
+    public static String fillToZeroPadding (int value, int zeroCount)
+    {
+        return String.format("%0" + zeroCount + "d", value);
+    }
+
+    /**
      * 쿼리 Like 패턴도 검색되도록
      *
      * @param str
@@ -36,4 +48,20 @@ public class StringUtil
         return str.replace("%", "\\%").replace("_", "\\_");
     }
 
+    /**
+     * 문자열 뒷부분 생략
+     *
+     * @param str
+     * @param maxLength
+     * @return
+     */
+    public static String getEllipsis (String str, int maxLength)
+    {
+        if (str == null || StringUtils.length(str) <= maxLength)
+        {
+            return str;
+        }
+
+        return StringUtils.join(StringUtils.substring(str, 0, maxLength - 3), "...");
+    }
 }

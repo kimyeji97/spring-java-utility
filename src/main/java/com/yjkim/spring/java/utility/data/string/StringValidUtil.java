@@ -22,10 +22,23 @@ public class StringValidUtil
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$");
     // 우편번호 패턴
     private static final Pattern PATTERN_ZIP = Pattern.compile("^(\\d\\d\\d)?([-])?(\\d\\d\\d)?$");
-
+    // 핸드폰 번호
+    private static final Pattern PATTERN_KOREAN_MOBILE =
+            Pattern.compile("^(010|011|016|017|018|019)?([-])?(\\d\\d\\d(\\d)?)+([-])?(\\d\\d\\d\\d)+$");
     private static final String ZERO_TO_255 = "(\\d{1,2}|(0|1)\\d{2}|2[0-4]\\d|25[0-5])";
     private static final Pattern IP_PATTERN = Pattern.compile(
             ZERO_TO_255 + "\\." + ZERO_TO_255 + "\\." + ZERO_TO_255 + "\\." + ZERO_TO_255);
+
+    /**
+     * mobile no 패턴 데이터인지 확인한다.
+     *
+     * @param mobile 원문 데이터
+     * @return boolean mobile no 패턴 체크 여부
+     */
+    public static boolean isValidMobile (String mobile)
+    {
+        return PATTERN_KOREAN_MOBILE.matcher(mobile).matches();
+    }
 
     /**
      * 유효한 이메일 문자열인지 반환

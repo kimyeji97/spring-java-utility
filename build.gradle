@@ -1,14 +1,21 @@
-plugins {
-    id 'java'
-    id 'org.springframework.boot' version '3.1.3'
-    id 'io.spring.dependency-management' version '1.1.3'
+buildscript {
+    ext {
+        jacksonVersion = "2.17.0"
+        poiVersion = "5.2.5"
+    }
 }
 
-group = 'com.yjkim'
-version = '0.0.1-SNAPSHOT'
+plugins {
+    id "java"
+    id "org.springframework.boot" version "3.1.3"
+    id "io.spring.dependency-management" version "1.1.3"
+}
+
+group = "com.yjkim"
+version = "0.0.1-SNAPSHOT"
 
 java {
-    sourceCompatibility = '17'
+    sourceCompatibility = "17"
 }
 
 configurations {
@@ -22,31 +29,27 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation "org.springframework.boot:spring-boot-starter"
+    compileOnly "org.projectlombok:lombok"
+    annotationProcessor "org.projectlombok:lombok"
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
 
-
-    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    implementation 'org.apache.commons:commons-lang3:3.12.0'
-
-    // https://mvnrepository.com/artifact/org.apache.poi/poi
-    implementation 'org.apache.poi:poi:5.2.3'
-    // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
-    implementation 'org.apache.poi:poi-ooxml:5.2.3'
-
-    // https://mvnrepository.com/artifact/com.google.guava/guava
-    implementation 'com.google.guava:guava:32.1.2-jre'
+    // commons lang3
+    implementation "org.apache.commons:commons-lang3:3.12.0"
 
     // jackson
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.17.0'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.17.0'
+    implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}"
 
+    // poi
+    implementation "org.apache.poi:poi:${poiVersion}"
+    implementation "org.apache.poi:poi-ooxml:${poiVersion}"
 
+    // quava
+    implementation "com.google.guava:guava:32.1.2-jre"
 }
 
-tasks.named('test') {
+tasks.named("test") {
     useJUnitPlatform()
 }

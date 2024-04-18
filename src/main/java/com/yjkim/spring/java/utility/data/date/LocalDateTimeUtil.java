@@ -1,9 +1,9 @@
 package com.yjkim.spring.java.utility.data.date;
 
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -14,6 +14,35 @@ import java.util.Locale;
  */
 public class LocalDateTimeUtil
 {
+    public static final ZoneId ZONE_ASIA_SEOUL = ZoneId.of("Asia/Seoul");
+
+    /**
+     * 해당 날짜의 Month int 값 반환
+     * <pre>
+     *     {@link LocalDate}는 {@link Calendar}와 다르게 1월 1 ... 12월 12이다.
+     * </pre>
+     *
+     * @param date
+     * @return 1월 0 ... 12월 11
+     */
+    public static int getMonthValueStartByZero (LocalDate date)
+    {
+        return date.getMonthValue() - 1;
+    }
+
+    /**
+     * 해당 날짜의 요일 반환
+     * <pre>
+     *     {@link LocalDate}는 {@link Calendar}와 다르게 월요일 1 ... 일요일 7이다.
+     * </pre>
+     *
+     * @param date
+     * @return 일요일 1 ... 토요일 7
+     */
+    public static int getDayOfWeekValueStartBySun (LocalDate date)
+    {
+        return (date.getDayOfWeek().getValue() + 1) % 7;
+    }
 
     /**
      * 타임스템프 시간 값으로 LocalDateTime 객체 반환
@@ -70,7 +99,7 @@ public class LocalDateTimeUtil
      * @param locale  Locale
      * @return LocalDate
      */
-    public static LocalDate parseDate (String value, String pattern, Locale locale) throws ParseException
+    public static LocalDate parseDate (String value, String pattern, Locale locale)
     {
         return LocalDate.parse(value, DateTimeFormatter.ofPattern(pattern, locale));
     }
@@ -124,6 +153,7 @@ public class LocalDateTimeUtil
     {
         return LocalTime.parse(value, DateTimeFormatter.ofPattern(pattern, locale));
     }
+
 
     /**
      * 날자값을 지정된 패턴으로 출력한다.
@@ -216,5 +246,28 @@ public class LocalDateTimeUtil
             age--;
         }
         return age;
+    }
+
+    /**
+     * 두 날짜간의 차이 반환
+     *
+     * @param field {@link ChronoUnit} 차이 계산할 단위 (연,월,일,시,분,초,나노)
+     * @param date1 첫번재 날짜
+     * @param date2 두번째 날짜
+     * @return
+     */
+    public static int diff (ChronoUnit field, LocalDateTime date1, LocalDateTime date2)
+    {
+        return switch (field)
+        {
+            case YEARS -> Period.between(date1.toLocalDate(), date2.toLocalDate()).getYears();
+            case MONTHS -> Period.between(date1.toLocalDate(), date2.toLocalDate()).getMonths();
+            case DAYS -> Period.between(date1.toLocalDate(), date2.toLocalDate()).getDays();
+            case HOURS -> LocalTime.of(0, 0).plusSeconds(Duration.between(date1, date2).getSeconds()).getHour();
+            case MINUTES -> LocalTime.of(0, 0).plusSeconds(Duration.between(date1, date2).getSeconds()).getMinute();
+            case SECONDS -> LocalTime.of(0, 0).plusSeconds(Duration.between(date1, date2).getSeconds()).getSecond();
+            case NANOS -> LocalTime.of(0, 0).plusSeconds(Duration.between(date1, date2).getSeconds()).getNano();
+            default -> throw new IllegalStateException("Unexpected value: " + field);
+        };
     }
 }

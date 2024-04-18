@@ -1,113 +1,66 @@
-# spring-java-utility
+<div align="center">
 
-Spring boot 기반 Java utility 모음
+# spring-java-utility 📌
 
-그동안 개발 하면서 꾸준히 만들고 있습니다.
+<h4>Spring boot 기반 Java utility 모음</h4>
+다양한 프로젝트를 진행해 오면서 공통 혹은 자주 사용될 만한 로직을 구현한 Utility를 모았습니다.
+<br>
+꾸준히 로직을 추가 또는 수정하고 있습니다.
 
-## 👩🏻‍💻 Development environment
+</div>
 
-| items       | version |
-|-------------|---------|
-| Java        | 17      |
-| Spring Boot | 3.1.3   |
-| Gradle      | 8.2.1   |
+## 🛠️ Stack
+
+<div align="center">
+
+<img src="https://img.shields.io/badge/JAVA-v17-CC0000?style=flat&logo=openjdk&logoColor=white"/>
+<img src="https://img.shields.io/badge/Spring Boot-v3.0.6-6DB33F?style=flat&logo=springboot&logoColor=white"/>
+<img src="https://img.shields.io/badge/gradle-v7.6.1-02303A?style=flat&logo=gradle&logoColor=white"/>
+
+<br/>
+
+Maven repository
+<br>
+<img src="https://img.shields.io/badge/org.apache.commons-v3.12.0-000?style=flat&logoColor=white"/>
+<img src="https://img.shields.io/badge/com.fasterxml.jackson-v2.17.0-000?style=flat&logoColor=white"/>
+<img src="https://img.shields.io/badge/org.apache.poi-v5.2.5-000?style=flat&logoColor=white"/>
+
+</div>
 
 ## 📦 Packages
 
-### [string](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fstring)
+### [data](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fdata)
 
-- 문자 관련 패키지
-
-| util                                                                                                              | 설명 |
-|-------------------------------------------------------------------------------------------------------------------|----|
-| [StringUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fstring%2FStringUtil.java)           |    |
-| [StringValidUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fstring%2FStringValidUtil.java) |    |
-| [URLUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fstring%2FURLUtil.java)                 |    |
-| [MaskingUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fstring%2FMaskingUtil.java)         |    |
-| [HexUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fstring%2FHexUtil.java)                 |    |
-
-### [number](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fnumber)
-
-- 숫자 관련 패키지
-
-| util                                                                                                    | 설명 |
-|---------------------------------------------------------------------------------------------------------|----|
-| [NumberUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fnumber%2FNumberUtil.java) |    |
-
-### [date](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fdate)
-
-- 날짜 관련 패키지
-
-| util                                                                                                            | 설명 |
-|-----------------------------------------------------------------------------------------------------------------|----|
-| [DateUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fdate%2FDateUtil.java)               |    |
-| [DateConvertUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fdate%2FDateConvertUtil.java) |    |
-| [DateValidUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fdate%2FDateValidUtil.java)     |    |
-
-### [list](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Flist)
-
-- 배열, 리스트 객체 관련 패키지
-
-| util                                                                                                  | 설명 |
-|-------------------------------------------------------------------------------------------------------|----|
-| [ArraysUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Flist%2FArraysUtil.java) |    |
-| [ListUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Flist%2FListUtil.java)     |    |
-
-### [map](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fmap)
-
-- Map 객체 관련 패키지
-
-| util                                                                                                           | 설명 |
-|----------------------------------------------------------------------------------------------------------------|----|
-| [MapUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fmap%2FMapUtil.java)                 |    |
-| [MultiKeyHashMap.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fmap%2FMultiKeyHashMap.java) |    |
-| [MultiKeyTreeMap.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fmap%2FMultiKeyTreeMap.java) |    |
-
-### [json](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fjson)
-
-- JSON 객체 관련 패키지
-
-| util                                                                                                      | 설명 |
-|-----------------------------------------------------------------------------------------------------------|----|
-| [JsonUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fjson%2FJsonUtil.java)         |    |
-| [JsonNodeUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fjson%2FJsonNodeUtil.java) |    |
-
-### [object](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fobject)
-
-- 다양한 객체 관련 패키지 (List, Arrays, Collection, Stream, Map 등)
-
-| util                                                                                                            | 설명 |
-|-----------------------------------------------------------------------------------------------------------------|----|
-| [CollectionUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fobject%2FCollectionUtil.java) |    |
-| [StreamUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fobject%2FStreamUtil.java)         |    |
-| [ReflectionUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fobject%2FReflectionUtil.java) |    |
-
-### [encrypt](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fencrypt)
-
-- 암호화 관련 패키지
-
-| util                                                                                                     | 설명 |
-|----------------------------------------------------------------------------------------------------------|----|
-| [AES128Util.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fencrypt%2FAES128Util.java) |    |
-| [SHA256Util.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fencrypt%2FSHA256Util.java) |    |
+- `Java reflection API`를 활용한 로직 (클래스 type, Field, Parameter, Method invoke 등)
+- 문자열 다양한 패턴 유효성검사 로직 (이메일, IP, URL 등)
+- 문자열 특정 부분 마스킹 처리
+- 숫자 round, scale, 천단위 콤마
+- Object로 Query Param 생성
+- Object와 `Map` 변환 (Object <-> Map)
+- Object와 `Json` 변환 (Object <-> Json)
+- `New 이중 Map Type`
+- `List`를 n개로 파티셔닝 후 특정 method 실행
+- `Json String`을 `List`, `Map`, `JsonNode` 등 다양한 객체로 변환
+- `LocalDate`, `LocalTime`, `LocalDateTime` 관련 로직 (diff, merge, format, parse 등)
 
 ### [file](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Ffile)
 
-- 파일 I/O 관련 패키지
-
-| util                                                                                                        | 설명 |
-|-------------------------------------------------------------------------------------------------------------|----|
-| [FileUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Ffile%2FFileUtil.java)           |    |
-| [ZipUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Ffile%2FZipUtil.java)             |    |
-| [XSSFExcelUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Ffile%2FXSSFExcelUtil.java) |    |
-
-### [http](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fhttp)
+- `File` 및 `Directory` 생성/복사/이동/제거 및 존재 확인
+- `File` 크기, `MD5` checksum 확인
+- `File` read/write
+- `File` 및 `Directory` zip or unzip
+- `XSSFExcel` read/write, 셀 병합 등
 
 ### [spring](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fspring)
 
-- Spring framework 관련 패키지 (Bean, Annotation 등)
+- `ApplicationContext`에 접근해 특정 `Bean`을 조회
+- `Annotation` 조회
 
-| util                                                                                                            | 설명 |
-|-----------------------------------------------------------------------------------------------------------------|----|
-| [AnnotationUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fspring%2FAnnotationUtil.java) |    |
-| [BeanUtil.java](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fspring%2FBeanUtil.java)             |    |
+### [encrypt](src%2Fmain%2Fjava%2Fcom%2Fyjkim%2Fspring%2Fjava%2Futility%2Fencrypt)
+
+- 암호화 알고리즘을 통한 문자열 `암/복호화`
+
+## 🔥 After Plan
+
+1. 공통 규격을 가진 Excel Exporter 로직 구현
+
