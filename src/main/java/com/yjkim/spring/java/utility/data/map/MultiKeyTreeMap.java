@@ -1,36 +1,34 @@
-package com.yjkim.spring.java.utility.map;
+package com.yjkim.spring.java.utility.data.map;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
- * MultiKeyHashMap provides to store values with two level hierarchy of keys,
+ * MultiKeyTreeMap provides to store values with two level hierarchy of keys,
  * super key (K1) and sub key (K2). The objects are inserted using super and sub keys.
  * It is not mandatory to use both keys as hierarchy, user can use two keys to store
  * the values and use either of the key to retrieve it.
- * <p>
- * import
- * - https://mvnrepository.com/artifact/com.google.guava/guava
  *
  * @author Prathab K
  */
-public class MultiKeyHashMap<K1, K2, V>
+public class MultiKeyTreeMap<K1, K2, V> implements Serializable
 {
 
     /**
-     * Map structure holding another Map structure to implement MultiKeyHashMap
+     * Map structure holding another Map structure to implement MultiKeyTreeMap
      */
-    private final Map<K1, Map<K2, V>> mkMap = new HashMap<>();
+    private final SortedMap<K1, SortedMap<K2, V>> mkMap = new TreeMap<>();
 
     private final Set<K2> emptySet = ImmutableSet.<K2>builder().build();
     private final List<V> emptyValueSet = ImmutableList.<V>builder().build();
 
     /**
-     * Initializes the MultiKeyHashMap
+     * Initializes the MultiKeyTreeMap
      */
-    public MultiKeyHashMap ()
+    public MultiKeyTreeMap ()
     {
     }
 
@@ -45,13 +43,13 @@ public class MultiKeyHashMap<K1, K2, V>
      */
     public V put (K1 k1, K2 k2, V v)
     {
-        Map<K2, V> k2Map = null;
+        SortedMap<K2, V> k2Map = null;
         if (mkMap.containsKey(k1))
         {
             k2Map = mkMap.get(k1);
         } else
         {
-            k2Map = new HashMap<K2, V>();
+            k2Map = new TreeMap<K2, V>();
             mkMap.put(k1, k2Map);
         }
         return k2Map.put(k2, v);
@@ -109,7 +107,7 @@ public class MultiKeyHashMap<K1, K2, V>
      * @return HashMap structure contains the values for the key k1 if exists
      * or <tt>null</tt> if does not exists
      */
-    public Map<K2, V> get (K1 k1)
+    public SortedMap<K2, V> get (K1 k1)
     {
         return mkMap.get(k1);
     }
@@ -122,7 +120,7 @@ public class MultiKeyHashMap<K1, K2, V>
      */
     public V getBySubKey (K2 k2)
     {
-        for (Map<K2, V> m : mkMap.values())
+        for (SortedMap<K2, V> m : mkMap.values())
         {
             if (m.containsKey(k2))
             {
@@ -157,20 +155,20 @@ public class MultiKeyHashMap<K1, K2, V>
      * @return previous value (HashMap structure) associated with specified key, or <tt>null</tt>
      * if there was no mapping for key.
      */
-    public Map<K2, V> remove (K1 k1)
+    public SortedMap<K2, V> remove (K1 k1)
     {
         return mkMap.remove(k1);
     }
 
     /**
-     * Size of MultiKeyHashMap
+     * Size of MultiKeyTreeMap
      *
-     * @return MultiKeyHashMap size
+     * @return MultiKeyTreeMap size
      */
     public int size ()
     {
         int size = 0;
-        for (Map<K2, V> m : mkMap.values())
+        for (SortedMap<K2, V> m : mkMap.values())
         {
             size++;
             size += m.size();
@@ -195,7 +193,7 @@ public class MultiKeyHashMap<K1, K2, V>
      */
     public void clear ()
     {
-        for (Map<K2, V> m : mkMap.values())
+        for (SortedMap<K2, V> m : mkMap.values())
         {
             m.clear();
         }
@@ -233,16 +231,16 @@ public class MultiKeyHashMap<K1, K2, V>
     }
 
     /**
-     * Returns all the value objects in the MultiKeyHashMap
+     * Returns all the value objects in the MultiKeyTreeMap
      *
      * @return value objects as List
      */
     public List<V> values ()
     {
-        Collection<Map<K2, V>> values1 = mkMap.values();
+        Collection<SortedMap<K2, V>> values1 = mkMap.values();
 
         List<V> values = new ArrayList<>();
-        for (Map<K2, V> m : values1)
+        for (SortedMap<K2, V> m : values1)
         {
             values.addAll(m.values());
         }
@@ -263,7 +261,7 @@ public class MultiKeyHashMap<K1, K2, V>
      */
     public boolean isAbsent (K1 key1, K2 key2)
     {
-        Map<K2, V> k2VMap = get(key1);
+        SortedMap<K2, V> k2VMap = get(key1);
         if (k2VMap != null)
         {
             return !k2VMap.containsKey(key2);
@@ -273,17 +271,12 @@ public class MultiKeyHashMap<K1, K2, V>
         }
     }
 
-    public void put (K1 key1, Map<K2, V> v2Map)
+    public void put (K1 key1, SortedMap<K2, V> v2Map)
     {
         mkMap.put(key1, v2Map);
     }
 
-    /**
-     * Map 타입 반환
-     *
-     * @return 원본 Map
-     */
-    public Map<K1, Map<K2, V>> getMap ()
+    public SortedMap<K1, SortedMap<K2, V>> getMap ()
     {
         return mkMap;
     }
@@ -295,7 +288,7 @@ public class MultiKeyHashMap<K1, K2, V>
      * @param defaultValue 기본 값
      * @return value or defaultValue
      */
-    public Map<K2, V> getOrDefault (K1 key, Map<K2, V> defaultValue)
+    public SortedMap<K2, V> getOrDefault (K1 key, SortedMap<K2, V> defaultValue)
     {
         if (mkMap.containsKey(key))
         {

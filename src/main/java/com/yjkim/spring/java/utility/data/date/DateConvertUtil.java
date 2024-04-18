@@ -1,8 +1,9 @@
-package com.yjkim.spring.java.utility.date;
+package com.yjkim.spring.java.utility.data.date;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -12,13 +13,34 @@ import java.util.TimeZone;
 public class DateConvertUtil
 {
 
+    public static Calendar convertDateToCalendar (Date date)
+    {
+        if (date == null)
+        {
+            return null;
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal;
+    }
+
+    @Deprecated
+    public static Date convertCalendarToDate (Calendar cal)
+    {
+        if (cal == null)
+        {
+            return null;
+        }
+        return new Date(cal.getTimeInMillis());
+    }
+
     /**
      * Date to LocalDate
      *
      * @param date
      * @return
      */
-    public static LocalDate convertDateToLocalDate(Date date)
+    public static LocalDate convertDateToLocalDate (Date date)
     {
         if (date == null)
         {
@@ -35,7 +57,7 @@ public class DateConvertUtil
      * @param timeZone
      * @return
      */
-    public static LocalDate convertDateToLocalDate(Date date, TimeZone timeZone)
+    public static LocalDate convertDateToLocalDate (Date date, TimeZone timeZone)
     {
         if (date == null)
         {
@@ -51,7 +73,7 @@ public class DateConvertUtil
      * @param date
      * @return
      */
-    public static LocalDateTime convertDateToLocalDateTime(Date date)
+    public static LocalDateTime convertDateToLocalDateTime (Date date)
     {
         if (date == null)
         {
@@ -68,7 +90,7 @@ public class DateConvertUtil
      * @param timeZone
      * @return
      */
-    public static LocalDateTime convertDateToLocalDateTime(Date date, TimeZone timeZone)
+    public static LocalDateTime convertDateToLocalDateTime (Date date, TimeZone timeZone)
     {
         if (date == null)
         {

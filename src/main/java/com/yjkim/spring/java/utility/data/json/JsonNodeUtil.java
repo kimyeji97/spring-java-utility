@@ -1,4 +1,4 @@
-package com.yjkim.spring.java.utility.json;
+package com.yjkim.spring.java.utility.data.json;
 
 import com.fasterxml.jackson.databind.JsonNode;
 

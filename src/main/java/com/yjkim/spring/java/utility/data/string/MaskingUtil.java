@@ -1,10 +1,9 @@
-package com.yjkim.spring.java.utility.string;
+package com.yjkim.spring.java.utility.data.string;
 
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**

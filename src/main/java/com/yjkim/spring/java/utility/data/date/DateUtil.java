@@ -1,22 +1,18 @@
-package com.yjkim.spring.java.utility.date;
+package com.yjkim.spring.java.utility.data.date;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
  * Date 유틸리티
- * <p>
- * import 라이브러리
- * - https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+ *
+ * @deprecated Date 객체 사용 관련 삭제 예정
  */
+@Deprecated
 public class DateUtil
 {
     /**
@@ -27,8 +23,7 @@ public class DateUtil
      */
     public static int getYear (Date date)
     {
-        Calendar tcal = Calendar.getInstance();
-        tcal.setTime(date);
+        Calendar tcal = DateConvertUtil.convertDateToCalendar(date);
         return tcal.get(Calendar.YEAR);
     }
 
@@ -40,8 +35,7 @@ public class DateUtil
      */
     public static int getMonth (Date date)
     {
-        Calendar tcal = Calendar.getInstance();
-        tcal.setTime(date);
+        Calendar tcal = DateConvertUtil.convertDateToCalendar(date);
         return tcal.get(Calendar.MONTH) + 1;
     }
 
@@ -53,8 +47,7 @@ public class DateUtil
      */
     public static int getDay (Date date)
     {
-        Calendar tcal = Calendar.getInstance();
-        tcal.setTime(date);
+        Calendar tcal = DateConvertUtil.convertDateToCalendar(date);
         return tcal.get(Calendar.DATE);
     }
 
@@ -66,8 +59,7 @@ public class DateUtil
      */
     public static int getHour (Date date)
     {
-        Calendar tcal = Calendar.getInstance();
-        tcal.setTime(date);
+        Calendar tcal = DateConvertUtil.convertDateToCalendar(date);
         return tcal.get(Calendar.HOUR_OF_DAY);
     }
 
@@ -79,8 +71,7 @@ public class DateUtil
      */
     public static int getMinute (Date date)
     {
-        Calendar tcal = Calendar.getInstance();
-        tcal.setTime(date);
+        Calendar tcal = DateConvertUtil.convertDateToCalendar(date);
         return tcal.get(Calendar.MINUTE);
     }
 
@@ -92,8 +83,7 @@ public class DateUtil
      */
     public static int getSecond (Date date)
     {
-        Calendar tcal = Calendar.getInstance();
-        tcal.setTime(date);
+        Calendar tcal = DateConvertUtil.convertDateToCalendar(date);
         return tcal.get(Calendar.SECOND);
     }
 
@@ -105,8 +95,7 @@ public class DateUtil
      */
     public static int getMilliSecond (Date date)
     {
-        Calendar tcal = Calendar.getInstance();
-        tcal.setTime(date);
+        Calendar tcal = DateConvertUtil.convertDateToCalendar(date);
         return tcal.get(Calendar.MILLISECOND);
     }
 
@@ -118,8 +107,7 @@ public class DateUtil
      */
     public static Date yearAdd (Date date, int amount)
     {
-        Calendar tcal = Calendar.getInstance();
-        tcal.setTime(date);
+        Calendar tcal = DateConvertUtil.convertDateToCalendar(date);
         tcal.add(Calendar.YEAR, amount);
         return tcal.getTime();
     }
@@ -132,8 +120,7 @@ public class DateUtil
      */
     public static Date monthAdd (Date date, int amount)
     {
-        Calendar tcal = Calendar.getInstance();
-        tcal.setTime(date);
+        Calendar tcal = DateConvertUtil.convertDateToCalendar(date);
         tcal.add(Calendar.MONTH, amount);
         return tcal.getTime();
     }
@@ -146,8 +133,7 @@ public class DateUtil
      */
     public static Date dayAdd (Date date, int amount)
     {
-        Calendar tcal = Calendar.getInstance();
-        tcal.setTime(date);
+        Calendar tcal = DateConvertUtil.convertDateToCalendar(date);
         tcal.add(Calendar.DATE, amount);
         return tcal.getTime();
     }
@@ -160,8 +146,7 @@ public class DateUtil
      */
     public static Date hourAdd (Date date, int amount)
     {
-        Calendar tcal = Calendar.getInstance();
-        tcal.setTime(date);
+        Calendar tcal = DateConvertUtil.convertDateToCalendar(date);
         tcal.add(Calendar.HOUR_OF_DAY, amount);
         return tcal.getTime();
     }
@@ -174,8 +159,7 @@ public class DateUtil
      */
     public static Date minuteAdd (Date date, int amount)
     {
-        Calendar tcal = Calendar.getInstance();
-        tcal.setTime(date);
+        Calendar tcal = DateConvertUtil.convertDateToCalendar(date);
         tcal.add(Calendar.MINUTE, amount);
         return tcal.getTime();
     }
@@ -230,8 +214,7 @@ public class DateUtil
      */
     public static String formatDate (Date date, String pattern)
     {
-        Calendar tcal = Calendar.getInstance();
-        tcal.setTime(date);
+        Calendar tcal = DateConvertUtil.convertDateToCalendar(date);
         SimpleDateFormat formatter = new SimpleDateFormat(pattern);
         return formatter.format(tcal.getTime());
     }
@@ -246,46 +229,9 @@ public class DateUtil
      */
     public static String formatDate (Date date, String pattern, Locale locale)
     {
-        Calendar tcal = Calendar.getInstance();
-        tcal.setTime(date);
+        Calendar tcal = DateConvertUtil.convertDateToCalendar(date);
         SimpleDateFormat formatter = new SimpleDateFormat(pattern, locale);
         return formatter.format(tcal.getTime());
-    }
-
-    /**
-     * 날자값을 지정된 패턴으로 출력한다.
-     *
-     * @param date    Date
-     * @param pattern String
-     * @return String
-     */
-    public static String formatDate (LocalDate date, String pattern)
-    {
-        return date.format(DateTimeFormatter.ofPattern(pattern));
-    }
-
-    /**
-     * 날자값을 지정된 패턴으로 출력한다.
-     *
-     * @param date    Date
-     * @param pattern String
-     * @return String
-     */
-    public static String formatDate (LocalDateTime date, String pattern)
-    {
-        return date.format(DateTimeFormatter.ofPattern(pattern));
-    }
-
-    /**
-     * 시간값을 지정된 패턴으로 출력한다.
-     *
-     * @param time    time
-     * @param pattern String
-     * @return String
-     */
-    public static String formatDate (LocalTime time, String pattern)
-    {
-        return time.format(DateTimeFormatter.ofPattern(pattern));
     }
 
     /**
@@ -447,17 +393,6 @@ public class DateUtil
     public static int getAge (Date birthDay)
     {
         return DateUtil.getAge(DateUtil.getYear(birthDay), DateUtil.getMonth(birthDay), DateUtil.getDay(birthDay));
-    }
-
-    /**
-     * LocalDate 객체로 만 나이 구하기
-     *
-     * @param birthDay
-     * @return
-     */
-    public static int getAge (LocalDate birthDay)
-    {
-        return DateUtil.getAge(birthDay.getYear(), birthDay.getMonthValue(), birthDay.getDayOfMonth());
     }
 
     /**

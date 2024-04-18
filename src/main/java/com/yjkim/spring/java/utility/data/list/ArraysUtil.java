@@ -1,4 +1,4 @@
-package com.yjkim.spring.java.utility.list;
+package com.yjkim.spring.java.utility.data.list;
 
 import org.apache.commons.lang3.ObjectUtils;
 

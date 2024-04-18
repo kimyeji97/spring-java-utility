@@ -1,4 +1,4 @@
-package com.yjkim.spring.java.utility.object;
+package com.yjkim.spring.java.utility.data;
 
 import java.util.Collection;
 import java.util.Collections;

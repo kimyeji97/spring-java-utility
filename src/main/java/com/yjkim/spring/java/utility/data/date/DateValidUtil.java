@@ -1,4 +1,4 @@
-package com.yjkim.spring.java.utility.date;
+package com.yjkim.spring.java.utility.data.date;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

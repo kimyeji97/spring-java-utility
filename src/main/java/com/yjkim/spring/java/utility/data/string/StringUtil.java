@@ -1,4 +1,4 @@
-package com.yjkim.spring.java.utility.string;
+package com.yjkim.spring.java.utility.data.string;
 
 import org.apache.commons.lang3.StringUtils;
 

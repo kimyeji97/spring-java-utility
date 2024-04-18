@@ -1,4 +1,4 @@
-package com.yjkim.spring.java.utility.object;
+package com.yjkim.spring.java.utility.data;
 
 import com.sun.jdi.InternalException;
 import lombok.extern.slf4j.Slf4j;

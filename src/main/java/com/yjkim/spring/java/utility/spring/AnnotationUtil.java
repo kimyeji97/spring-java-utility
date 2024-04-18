@@ -1,6 +1,6 @@
 package com.yjkim.spring.java.utility.spring;
 
-import com.yjkim.spring.java.utility.object.ReflectionUtil;
+import com.yjkim.spring.java.utility.data.ReflectionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 

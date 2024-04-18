@@ -1,4 +1,4 @@
-package com.yjkim.spring.java.utility.list;
+package com.yjkim.spring.java.utility.data.list;
 
 import com.sun.jdi.InternalException;
 import org.apache.commons.lang3.ObjectUtils;

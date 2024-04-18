@@ -1,6 +1,6 @@
-package com.yjkim.spring.java.utility.string;
+package com.yjkim.spring.java.utility.data.string;
 
-import com.yjkim.spring.java.utility.json.JsonUtil;
+import com.yjkim.spring.java.utility.data.json.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 

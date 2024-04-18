@@ -1,4 +1,4 @@
-package com.yjkim.spring.java.utility.number;
+package com.yjkim.spring.java.utility.data.number;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -231,4 +231,7 @@ public class NumberUtil
         return result;
     }
 
+    /**
+     * TODO ChoiceFormat 활용한 메서드 하나 만들기
+     */
 }
