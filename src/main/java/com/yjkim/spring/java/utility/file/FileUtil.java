@@ -1,17 +1,6 @@
 package com.yjkim.spring.java.utility.file;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -19,6 +8,7 @@ import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Consumer;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -323,6 +313,25 @@ public class FileUtil
     }
 
     /**
+     * 존재하는 파일 반환
+     * <pre>
+     *     존재하지 않는 경우 null을 반환합니다.
+     * </pre>
+     *
+     * @param path
+     * @return File or null
+     */
+    public static File getExistingFile (String path)
+    {
+        if (path == null)
+        {
+            return null;
+        }
+        File fp = new File(path);
+        return fp.exists() ? fp : null;
+    }
+
+    /**
      * 파일의 크기를 확인한다.
      *
      * @param file 확인할 파일 Path
@@ -599,6 +608,26 @@ public class FileUtil
                 bsi.close();
             }
             bsi = null;
+        }
+    }
+
+    public static void readAndProcessByLine (File fp, Consumer<String> process) throws IOException
+    {
+        try (BufferedReader bis = new BufferedReader(new FileReader(fp)))
+        {
+            String line;
+            while ((line = bis.readLine()) != null)
+            {
+                if (line.isBlank())
+                {
+                    continue;
+                }
+                process.accept(line);
+            }
+        } catch (IOException ex)
+        {
+            log.error(ex.getMessage());
+            throw ex;
         }
     }
 
