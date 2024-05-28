@@ -14,21 +14,35 @@ import org.apache.commons.lang3.StringUtils;
  * 숫자 관련 공통 유틸리티
  */
 @Slf4j
-public class NumberUtil
-{
+public class NumberUtil {
     public static Random RANDOM;
 
-    static
-    {
-        try
-        {
+    static {
+        try {
             RANDOM = SecureRandom.getInstanceStrong();
-        } catch (NoSuchAlgorithmException e)
-        {
+        } catch (NoSuchAlgorithmException e) {
             log.error(e.getMessage());
             RANDOM = new Random();
         }
     }
+
+    public static <T extends Number> boolean isOrMore(T value, T num) {
+        if (value == null) {
+            return false;
+        }
+
+        try {
+            return value.doubleValue() >= num.doubleValue();
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    /**
+     * ##################################################################################
+     * Integer
+     * ##################################################################################
+     */
 
     /**
      * 해당 숫자가 특정 범위 안에 있는지 확인
@@ -38,20 +52,16 @@ public class NumberUtil
      * @param e
      * @return
      */
-    public static boolean isIncludeInRange (Integer num, Integer s, Integer e)
-    {
-        if (num == null || (s == null && e == null))
-        {
+    public static boolean isIncludeInRange(Integer num, Integer s, Integer e) {
+        if (num == null || (s == null && e == null)) {
             return false;
         }
 
-        if (s == null)
-        {
+        if (s == null) {
             return num <= e;
         }
 
-        if (e == null)
-        {
+        if (e == null) {
             return s <= num;
         }
 
@@ -64,10 +74,8 @@ public class NumberUtil
      * @param num 숫자
      * @return 천단위 콤마 찍힌 문자
      */
-    public static String numberFormatComma (Number num)
-    {
-        if (num == null)
-        {
+    public static String numberFormatComma(Number num) {
+        if (num == null) {
             return StringUtils.EMPTY;
         }
         return NumberFormat.getInstance().format(num);
@@ -85,10 +93,8 @@ public class NumberUtil
      * @param val
      * @return
      */
-    public static Double convertNullToZero (Double val)
-    {
-        if (val == null)
-        {
+    public static Double convertNullToZero(Double val) {
+        if (val == null) {
             return 0d;
         }
         return val;
@@ -100,8 +106,7 @@ public class NumberUtil
      * @param val
      * @return
      */
-    public static Double convertNullOrMinusToZero (Double val)
-    {
+    public static Double convertNullOrMinusToZero(Double val) {
         Double result = convertNullToZero(val);
         return result < 1 ? 0 : result;
     }
@@ -113,10 +118,8 @@ public class NumberUtil
      * @param n
      * @return
      */
-    public static Double round (Double d, int n)
-    {
-        if (d == null || n < 0)
-        {
+    public static Double round(Double d, int n) {
+        if (d == null || n < 0) {
             return d;
         }
         double m = Math.pow(10.0, n);
@@ -135,10 +138,8 @@ public class NumberUtil
      * @param val
      * @return
      */
-    public static Integer convertNullToZero (Integer val)
-    {
-        if (val == null)
-        {
+    public static Integer convertNullToZero(Integer val) {
+        if (val == null) {
             return 0;
         }
         return val;
@@ -150,8 +151,7 @@ public class NumberUtil
      * @param val
      * @return
      */
-    public static Integer convertNullOrMinusToZero (Integer val)
-    {
+    public static Integer convertNullOrMinusToZero(Integer val) {
         Integer result = convertNullToZero(val);
         return result < 1 ? 0 : result;
     }
@@ -168,10 +168,8 @@ public class NumberUtil
      * @param val
      * @return
      */
-    public static BigDecimal convertNullToZero (BigDecimal val)
-    {
-        if (val == null)
-        {
+    public static BigDecimal convertNullToZero(BigDecimal val) {
+        if (val == null) {
             return BigDecimal.ZERO;
         }
         return val;
@@ -183,8 +181,7 @@ public class NumberUtil
      * @param val
      * @return
      */
-    public static BigDecimal convertNullOrMinusToZero (BigDecimal val)
-    {
+    public static BigDecimal convertNullOrMinusToZero(BigDecimal val) {
         BigDecimal result = convertNullToZero(val);
         return (result.compareTo(BigDecimal.ZERO) < 0) ? BigDecimal.ZERO : result;
     }
@@ -197,11 +194,16 @@ public class NumberUtil
      * @param roundingMode 반올림 모드
      * @return scale된 값
      */
-    public static BigDecimal scale (BigDecimal val, int unit, RoundingMode roundingMode)
-    {
+    public static BigDecimal scale(BigDecimal val, int unit, RoundingMode roundingMode) {
         return val == null || val.equals(BigDecimal.ZERO) ?
                 val :
                 val.divide(new BigDecimal(unit)).setScale(0, roundingMode);
+    }
+
+    public static BigDecimal scale(BigDecimal val, int unit, int scale,  RoundingMode roundingMode) {
+        return val == null || val.equals(BigDecimal.ZERO) ?
+                val :
+                val.divide(new BigDecimal(unit)).setScale(scale, roundingMode);
     }
 
     /**
@@ -210,9 +212,14 @@ public class NumberUtil
      * @param val 절삭 대상 숫자
      * @return 천 만 단위로 절삭된 숫자
      */
-    public static BigDecimal scaleDownToMillion (BigDecimal val)
-    {
+    public static BigDecimal scaleDownToMillion(BigDecimal val) {
         return NumberUtil.scale(val, 1000000, RoundingMode.DOWN);
+    }
+    public static BigDecimal scaleFloorToMillion(BigDecimal val) {
+        return NumberUtil.scale(val, 1000000, RoundingMode.FLOOR);
+    }
+    public static BigDecimal scaleFloorToMillion(BigDecimal val, int scale) {
+        return NumberUtil.scale(val, 1000000, scale, RoundingMode.FLOOR);
     }
 
     /**
@@ -221,11 +228,9 @@ public class NumberUtil
      * @param vals 절삭 대상 숫자들
      * @return 천 만 단위로 전삭된 숫자들
      */
-    public static BigDecimal[] scaleDownToMillion (BigDecimal[] vals)
-    {
+    public static BigDecimal[] scaleDownToMillion(BigDecimal[] vals) {
         BigDecimal[] result = new BigDecimal[vals.length];
-        for (int i = 0; i < vals.length; i++)
-        {
+        for (int i = 0; i < vals.length; i++) {
             result[i] = NumberUtil.scaleDownToMillion(vals[i]);
         }
         return result;

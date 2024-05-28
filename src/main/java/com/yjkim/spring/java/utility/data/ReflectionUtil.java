@@ -1,6 +1,7 @@
 package com.yjkim.spring.java.utility.data;
 
 import com.sun.jdi.InternalException;
+import com.yjkim.spring.java.utility.data.map.MapUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +14,8 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static java.util.Collections.EMPTY_MAP;
 
 /**
  * Java reflection 기능 사용 유틸리티
@@ -489,6 +492,21 @@ public class ReflectionUtil
                 log.error(e.getMessage(), e);
             }
         }
+    }
 
+    /**
+     * 두개의 Object를 비교해서 다른 new값을 리턴한다.
+     *
+     * @param obj1 (old)
+     * @param obj2 (new)
+     * @return Map<String, String>
+     */
+    public static Map<String, Object> compareObject(Object obj1, Object obj2)
+    {
+        if (ObjectUtils.isEmpty(obj1) || ObjectUtils.isEmpty(obj2) || obj1.getClass() != obj2.getClass())
+        {
+            return EMPTY_MAP;
+        }
+        return MapUtil.compareMapObject(MapUtil.converObjectToMap(obj1), MapUtil.converObjectToMap(obj2));
     }
 }

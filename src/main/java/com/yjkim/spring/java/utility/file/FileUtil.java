@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -18,10 +19,8 @@ import org.apache.commons.lang3.StringUtils;
  * 파일과 관련된 유틸리티
  */
 @Slf4j
-public class FileUtil
-{
-    public FileUtil ()
-    {
+public class FileUtil {
+    public FileUtil() {
         throw new IllegalStateException("FileUtil is utility class.");
     }
 
@@ -31,22 +30,17 @@ public class FileUtil
      * @param file_name 파일명
      * @return 파일 확장자명
      */
-    public static String getExtension (String file_name)
-    {
-        if (file_name != null && !file_name.trim().equals(""))
-        {
+    public static String getExtension(String file_name) {
+        if (file_name != null && !file_name.trim().equals("")) {
             String file_separator = "\\"; // Windows format
-            if (file_name.startsWith("/"))
-            { // Unix format
+            if (file_name.startsWith("/")) { // Unix format
                 file_separator = "/";
             }
-            if (file_name.lastIndexOf(file_separator) != -1)
-            {
+            if (file_name.lastIndexOf(file_separator) != -1) {
                 file_name = file_name.substring(file_name.lastIndexOf(file_separator) + 1);
             }
             String file_ext = "";
-            if (file_name.lastIndexOf(".") != -1)
-            {
+            if (file_name.lastIndexOf(".") != -1) {
                 file_ext = file_name.substring(file_name.lastIndexOf("."));
                 return file_ext;
             }
@@ -62,14 +56,12 @@ public class FileUtil
      * @param dest_fp 복사 대상 파일
      * @return 성공여부 (boolean)
      */
-    public static boolean copy (File src_fp, File dest_fp)
-    {
+    public static boolean copy(File src_fp, File dest_fp) {
         FileInputStream in = null;
         FileOutputStream out = null;
         BufferedInputStream inBuffer = null;
         BufferedOutputStream outBuffer = null;
-        try
-        {
+        try {
             in = new FileInputStream(src_fp);
             out = new FileOutputStream(dest_fp);
             inBuffer = new BufferedInputStream(in);
@@ -77,70 +69,50 @@ public class FileUtil
 
             int numofbytes = 0;
             byte[] buffer = new byte[8192];
-            while ((numofbytes = inBuffer.read(buffer, 0, buffer.length)) > -1)
-            {
+            while ((numofbytes = inBuffer.read(buffer, 0, buffer.length)) > -1) {
                 outBuffer.write(buffer, 0, numofbytes);
             }
             outBuffer.flush();
             // cleanupif files are not the same length
-            if (src_fp.length() != dest_fp.length())
-            {
+            if (src_fp.length() != dest_fp.length()) {
                 dest_fp.delete();
                 return false;
             }
 
             return true;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             dest_fp.delete();
             return false;
-        } finally
-        {
-            if (outBuffer != null)
-            {
-                try
-                {
+        } finally {
+            if (outBuffer != null) {
+                try {
                     outBuffer.close();
-                } catch (Exception ex)
-                {
-                } finally
-                {
+                } catch (Exception ex) {
+                } finally {
                     outBuffer = null;
                 }
             }
-            if (inBuffer != null)
-            {
-                try
-                {
+            if (inBuffer != null) {
+                try {
                     inBuffer.close();
-                } catch (Exception ex)
-                {
-                } finally
-                {
+                } catch (Exception ex) {
+                } finally {
                     inBuffer = null;
                 }
             }
-            if (out != null)
-            {
-                try
-                {
+            if (out != null) {
+                try {
                     out.close();
-                } catch (Exception ex)
-                {
-                } finally
-                {
+                } catch (Exception ex) {
+                } finally {
                     out = null;
                 }
             }
-            if (in != null)
-            {
-                try
-                {
+            if (in != null) {
+                try {
                     in.close();
-                } catch (Exception ex)
-                {
-                } finally
-                {
+                } catch (Exception ex) {
+                } finally {
                     in = null;
                 }
             }
@@ -154,25 +126,19 @@ public class FileUtil
      * @param dest_fp 이동 대상 파일
      * @return 성공여부 (boolean)
      */
-    public static boolean move (File src_fp, File dest_fp)
-    {
-        if (src_fp.renameTo(dest_fp))
-        {
+    public static boolean move(File src_fp, File dest_fp) {
+        if (src_fp.renameTo(dest_fp)) {
             return true;
         }
 
-        try
-        {
-            if (dest_fp.createNewFile())
-            {
+        try {
+            if (dest_fp.createNewFile()) {
                 // delete if copy was successful, otherwise move will fail
-                if (copy(src_fp, dest_fp))
-                {
+                if (copy(src_fp, dest_fp)) {
                     return src_fp.delete();
                 }
             }
-        } catch (IOException ex)
-        {
+        } catch (IOException ex) {
             return false;
         }
 
@@ -186,26 +152,20 @@ public class FileUtil
      * @param path 이동 대상 Path
      * @return 성공여부 (boolean)
      */
-    public static boolean move (File fp, String path)
-    {
+    public static boolean move(File fp, String path) {
         File new_fp = new File(path);
-        if (fp.renameTo(new_fp))
-        {
+        if (fp.renameTo(new_fp)) {
             return true;
         }
 
-        try
-        {
-            if (new_fp.createNewFile())
-            {
+        try {
+            if (new_fp.createNewFile()) {
                 // delete if copy was successful, otherwise move will fail
-                if (copy(fp, new_fp))
-                {
+                if (copy(fp, new_fp)) {
                     return fp.delete();
                 }
             }
-        } catch (IOException ex)
-        {
+        } catch (IOException ex) {
             return false;
         }
 
@@ -218,15 +178,12 @@ public class FileUtil
      * @param path 생성할 디렉토리 path
      * @return 성공여부 (boolean)
      */
-    public static boolean makeDirs (String path)
-    {
-        if (path == null)
-        {
+    public static boolean makeDirs(String path) {
+        if (path == null) {
             return false;
         }
         File fp = new File(path);
-        if (fp.exists())
-        {
+        if (fp.exists()) {
             return true;
         }
         return fp.mkdirs();
@@ -239,23 +196,18 @@ public class FileUtil
      * @param create true이면 하위 디렉토리가 없다면 생성하고, false면 생성하지 않는다.
      * @return 성공여부 (boolean)
      */
-    public static boolean makeDir (String path, boolean create)
-    {
-        if (path == null)
-        {
+    public static boolean makeDir(String path, boolean create) {
+        if (path == null) {
             return false;
         }
         File fp = new File(path);
 
-        if (create == true)
-        {
-            if (fp.exists())
-            {
+        if (create == true) {
+            if (fp.exists()) {
                 return true;
             }
             return fp.mkdirs();
-        } else
-        {
+        } else {
             return fp.mkdir();
         }
     }
@@ -266,16 +218,13 @@ public class FileUtil
      * @param file 삭제할 파일 path
      * @return 성공여부 (boolean)
      */
-    public static boolean remove (String file)
-    {
-        if (file == null)
-        {
+    public static boolean remove(String file) {
+        if (file == null) {
             return true;
         }
         File fp = new File(file);
 
-        if (fp.exists())
-        {
+        if (fp.exists()) {
             return fp.delete();
         }
         return true;
@@ -287,10 +236,8 @@ public class FileUtil
      * @param fp 삭제할 파일
      * @return 성공여부 (boolean)
      */
-    public static boolean remove (File fp)
-    {
-        if (fp != null && fp.exists())
-        {
+    public static boolean remove(File fp) {
+        if (fp != null && fp.exists()) {
             return fp.delete();
         }
         return true;
@@ -302,14 +249,22 @@ public class FileUtil
      * @param file 확인할 파일 Path
      * @return 존재 여부 (boolean)
      */
-    public static boolean exists (String file)
-    {
-        if (file == null)
-        {
+    public static boolean exists(String file) {
+        if (file == null) {
             return false;
         }
         File fp = new File(file);
         return fp.exists();
+    }
+
+    /**
+     * 파일이 존재하는 지 확인한다.
+     *
+     * @param file 파일 객체
+     * @return 존재 여부 (boolean)
+     */
+    public static boolean exists(File file) {
+        return file != null && file.exists();
     }
 
     /**
@@ -321,10 +276,8 @@ public class FileUtil
      * @param path
      * @return File or null
      */
-    public static File getExistingFile (String path)
-    {
-        if (path == null)
-        {
+    public static File getExistingFile(String path) {
+        if (path == null) {
             return null;
         }
         File fp = new File(path);
@@ -337,15 +290,12 @@ public class FileUtil
      * @param file 확인할 파일 Path
      * @return 파일크기
      */
-    public static long size (String file)
-    {
-        if (file == null)
-        {
+    public static long size(String file) {
+        if (file == null) {
             return 0;
         }
         File fp = new File(file);
-        if (fp.exists())
-        {
+        if (fp.exists()) {
             return fp.length();
         }
         return 0;
@@ -357,36 +307,27 @@ public class FileUtil
      * @param fp 확인할 파일
      * @return 체크섬 byte
      */
-    public static byte[] getMd5 (File fp)
-    {
+    public static byte[] getMd5(File fp) {
         MessageDigest md = null;
         BufferedInputStream in = null;
         byte[] buffer = null;
-        try
-        {
+        try {
             md = MessageDigest.getInstance("MD5");
             in = new BufferedInputStream(new FileInputStream(fp));
             int numofbytes = 0;
             buffer = new byte[8192];
-            while ((numofbytes = in.read(buffer, 0, buffer.length)) > -1)
-            {
+            while ((numofbytes = in.read(buffer, 0, buffer.length)) > -1) {
                 md.update(buffer, 0, numofbytes);
             }
             return md.digest();
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             return new byte[0];
-        } finally
-        {
-            if (in != null)
-            {
-                try
-                {
+        } finally {
+            if (in != null) {
+                try {
                     in.close();
-                } catch (Exception ex)
-                {
-                } finally
-                {
+                } catch (Exception ex) {
+                } finally {
                     in = null;
                 }
             }
@@ -401,36 +342,27 @@ public class FileUtil
      * @param filePath 확인할 파일 Path
      * @return 체크섬 byte
      */
-    public static byte[] getMd5 (String filePath)
-    {
+    public static byte[] getMd5(String filePath) {
         MessageDigest md = null;
         BufferedInputStream in = null;
         byte[] buffer = null;
-        try
-        {
+        try {
             md = MessageDigest.getInstance("MD5");
             in = new BufferedInputStream(new FileInputStream(new File(filePath)));
             int numofbytes = 0;
             buffer = new byte[8192];
-            while ((numofbytes = in.read(buffer, 0, buffer.length)) > -1)
-            {
+            while ((numofbytes = in.read(buffer, 0, buffer.length)) > -1) {
                 md.update(buffer, 0, numofbytes);
             }
             return md.digest();
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             return new byte[0];
-        } finally
-        {
-            if (in != null)
-            {
-                try
-                {
+        } finally {
+            if (in != null) {
+                try {
                     in.close();
-                } catch (Exception ex)
-                {
-                } finally
-                {
+                } catch (Exception ex) {
+                } finally {
                     in = null;
                 }
             }
@@ -445,37 +377,29 @@ public class FileUtil
      * @param path 확인할 파일 Path
      * @return 파일 내용 byte
      */
-    public static byte[] toBytes (String path) throws Exception
-    {
-        if (path == null)
-        {
+    public static byte[] toBytes(String path) throws Exception {
+        if (path == null) {
             return new byte[0];
         }
         ByteArrayOutputStream bao = null;
         byte[] buffer = new byte[8192];
         int numOfBytes = -1;
         BufferedInputStream bsi = null;
-        try
-        {
+        try {
             bao = new ByteArrayOutputStream();
             bsi = new BufferedInputStream(new FileInputStream(path));
-            while ((numOfBytes = bsi.read(buffer, 0, buffer.length)) != -1)
-            {
+            while ((numOfBytes = bsi.read(buffer, 0, buffer.length)) != -1) {
                 bao.write(buffer, 0, numOfBytes);
             }
             return bao.toByteArray();
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             throw ex;
-        } finally
-        {
-            if (bao != null)
-            {
+        } finally {
+            if (bao != null) {
                 bao.close();
             }
             bao = null;
-            if (bsi != null)
-            {
+            if (bsi != null) {
                 bsi.close();
             }
             bsi = null;
@@ -488,33 +412,26 @@ public class FileUtil
      * @param in 확인할 파일의 InputStream
      * @return 파일 내용 byte
      */
-    public static byte[] streamToBytes (InputStream in) throws IOException
-    {
+    public static byte[] streamToBytes(InputStream in) throws IOException {
         ByteArrayOutputStream bao = null;
         byte[] buffer = new byte[8192];
         int numOfBytes = -1;
         BufferedInputStream bsi = null;
-        try
-        {
+        try {
             bao = new ByteArrayOutputStream();
             bsi = new BufferedInputStream(in);
-            while ((numOfBytes = bsi.read(buffer, 0, buffer.length)) != -1)
-            {
+            while ((numOfBytes = bsi.read(buffer, 0, buffer.length)) != -1) {
                 bao.write(buffer, 0, numOfBytes);
             }
             return bao.toByteArray();
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             return new byte[0];
-        } finally
-        {
-            if (bao != null)
-            {
+        } finally {
+            if (bao != null) {
                 bao.close();
             }
             bao = null;
-            if (bsi != null)
-            {
+            if (bsi != null) {
                 bsi.close();
             }
             bsi = null;
@@ -527,33 +444,26 @@ public class FileUtil
      * @param fp 확인할 파일
      * @return 파일 내용 byte
      */
-    public static byte[] fileToBytes (File fp) throws IOException
-    {
+    public static byte[] fileToBytes(File fp) throws IOException {
         ByteArrayOutputStream bao = null;
         byte[] buffer = new byte[8192];
         int numOfBytes = -1;
         BufferedInputStream bsi = null;
-        try
-        {
+        try {
             bao = new ByteArrayOutputStream();
             bsi = new BufferedInputStream(new FileInputStream(fp));
-            while ((numOfBytes = bsi.read(buffer, 0, buffer.length)) != -1)
-            {
+            while ((numOfBytes = bsi.read(buffer, 0, buffer.length)) != -1) {
                 bao.write(buffer, 0, numOfBytes);
             }
             return bao.toByteArray();
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             return new byte[0];
-        } finally
-        {
-            if (bao != null)
-            {
+        } finally {
+            if (bao != null) {
                 bao.close();
             }
             bao = null;
-            if (bsi != null)
-            {
+            if (bsi != null) {
                 bsi.close();
             }
             bsi = null;
@@ -566,8 +476,7 @@ public class FileUtil
      * @param fp 확인할 파일
      * @return 파일 내용
      */
-    public static String fileToString (File fp) throws IOException
-    {
+    public static String fileToString(File fp) throws IOException {
         return fileToString(fp, Charset.forName("UTF-8"));
     }
 
@@ -578,54 +487,49 @@ public class FileUtil
      * @param charset charset
      * @return 파일 내용
      */
-    public static String fileToString (File fp, Charset charset) throws IOException
-    {
+    public static String fileToString(File fp, Charset charset) throws IOException {
         ByteArrayOutputStream bao = null;
         byte[] buffer = new byte[8192];
         int numOfBytes = -1;
         BufferedInputStream bsi = null;
-        try
-        {
+        try {
             bao = new ByteArrayOutputStream();
             bsi = new BufferedInputStream(new FileInputStream(fp));
-            while ((numOfBytes = bsi.read(buffer, 0, buffer.length)) != -1)
-            {
+            while ((numOfBytes = bsi.read(buffer, 0, buffer.length)) != -1) {
                 bao.write(buffer, 0, numOfBytes);
             }
             return new String(bao.toByteArray(), charset);
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             return "";
-        } finally
-        {
-            if (bao != null)
-            {
+        } finally {
+            if (bao != null) {
                 bao.close();
             }
             bao = null;
-            if (bsi != null)
-            {
+            if (bsi != null) {
                 bsi.close();
             }
             bsi = null;
         }
     }
 
-    public static void readAndProcessByLine (File fp, Consumer<String> process) throws IOException
-    {
-        try (BufferedReader bis = new BufferedReader(new FileReader(fp)))
-        {
+    /**
+     * 해당 파일을 line 단위로 읽어서 처리한다.
+     *
+     * @param fp      파일
+     * @param process line 단위로 읽어서 처리하는 프로세서
+     * @throws IOException
+     */
+    public static void readAndProcessByLine(File fp, Consumer<String> process) throws IOException {
+        try (BufferedReader bis = new BufferedReader(new FileReader(fp))) {
             String line;
-            while ((line = bis.readLine()) != null)
-            {
-                if (line.isBlank())
-                {
+            while ((line = bis.readLine()) != null) {
+                if (line.isBlank()) {
                     continue;
                 }
                 process.accept(line);
             }
-        } catch (IOException ex)
-        {
+        } catch (IOException ex) {
             log.error(ex.getMessage());
             throw ex;
         }
@@ -637,39 +541,35 @@ public class FileUtil
      * @param path  저장할 파일 path
      * @param bytes 파일의 내용
      */
-    public static void saveBytesToFile (String path, byte[] bytes) throws Exception
-    {
+    public static void saveBytesToFile(String path, byte[] bytes) throws Exception {
         saveBytesToFile(path, bytes, false);
     }
 
     /**
-     * 파일을 저장한다.
+     * 파일에 바이트를 쓰고 저장한다.
+     * <pre>
+     *     BufferedOutputStream를 사용
+     *     파일에 byte를 쓰고 저장
+     * </pre>
      *
      * @param path   저장할 파일 path
      * @param bytes  파일의 내용
      * @param append 존재하는 파일에 내용을 append 할지 여부
      */
-    public static void saveBytesToFile (String path, byte[] bytes, boolean append) throws Exception
-    {
-        if (path == null)
-        {
+    public static void saveBytesToFile(String path, byte[] bytes, boolean append) throws Exception {
+        if (path == null) {
             return;
         }
         BufferedOutputStream bos = null;
-        try
-        {
+        try {
             bos = new BufferedOutputStream(new FileOutputStream(path, append));
             bos.write(bytes);
             bos.flush();
-        } finally
-        {
-            if (bos != null)
-            {
-                try
-                {
+        } finally {
+            if (bos != null) {
+                try {
                     bos.close();
-                } finally
-                {
+                } finally {
                     bos = null;
                 }
             }
@@ -677,53 +577,44 @@ public class FileUtil
     }
 
     /**
-     * 파일을 저장한다.
+     * 파일에 Stream에 담긴 데이터를 쓰고 저장한다.
+     * <pre>
+     *     BufferedOutputStream, BufferedInputStream 사용
+     *     파일에 Stream에 담긴 데이터를 byte로 쓴다.
+     * </pre>
      *
      * @param path 저장할 파일 path
      * @param in   파일 InputStream
      */
-    public static void saveStreamToFile (String path, InputStream in) throws IOException
-    {
-        if (in == null)
-        {
+    public static void saveStreamToFile(String path, InputStream in) throws IOException {
+        if (in == null) {
             return;
         }
         BufferedOutputStream bos = null;
         BufferedInputStream inBuffer = null;
-        try
-        {
+        try {
             bos = new BufferedOutputStream(new FileOutputStream(path));
             inBuffer = new BufferedInputStream(in);
             int numofbytes = 0;
             byte[] buffer = new byte[8192];
-            while ((numofbytes = inBuffer.read(buffer, 0, buffer.length)) > -1)
-            {
+            while ((numofbytes = inBuffer.read(buffer, 0, buffer.length)) > -1) {
                 bos.write(buffer, 0, numofbytes);
             }
             bos.flush();
-        } finally
-        {
-            if (bos != null)
-            {
-                try
-                {
+        } finally {
+            if (bos != null) {
+                try {
                     bos.close();
-                } catch (Exception ex)
-                {
-                } finally
-                {
+                } catch (Exception ex) {
+                } finally {
                     bos = null;
                 }
             }
-            if (inBuffer != null)
-            {
-                try
-                {
+            if (inBuffer != null) {
+                try {
                     inBuffer.close();
-                } catch (Exception ex)
-                {
-                } finally
-                {
+                } catch (Exception ex) {
+                } finally {
                     inBuffer = null;
                 }
             }
@@ -731,21 +622,56 @@ public class FileUtil
 
     }
 
+
+    /**
+     * 파일에 텍스트를 쓰고 저장한다.
+     * <pre>
+     *     PrintWriter 사용
+     *     파일에 텍스트를 입력
+     * </pre>
+     *
+     * @param fullPath    파일 전체 경로
+     * @param list        작성 대상 리스트
+     * @param convertLine String으로 변환
+     * @param <T>
+     */
+    public static <T> void saveListToFile(String fullPath, List<T> list, Function<T, String> convertLine) {
+        if (StringUtils.isEmpty(fullPath)) {
+            log.error("file write target fullPath is empty.");
+            return;
+        }
+        if (convertLine == null) {
+            log.error("convertLine is null.");
+            return;
+        }
+
+        try (FileWriter fw = new FileWriter(fullPath);
+             PrintWriter pw = new PrintWriter(fw)
+        ) {
+            for (T obj : list) {
+                String line = convertLine.apply(obj);
+                if (StringUtils.isBlank(line)) {
+                    continue;
+                }
+                pw.println(line);
+            }
+            pw.flush();
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
     /**
      * 파일의 스트림을 닫는다.
      *
      * @param in 파일 InputStream
      */
-    public static void closeStream (InputStream in)
-    {
-        try
-        {
-            if (in != null)
-            {
+    public static void closeStream(InputStream in) {
+        try {
+            if (in != null) {
                 in.close();
             }
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
         }
         in = null;
     }
@@ -755,25 +681,18 @@ public class FileUtil
      *
      * @param out 파일 OutputStream
      */
-    public static void closeStream (OutputStream out)
-    {
-        try
-        {
-            if (out != null)
-            {
+    public static void closeStream(OutputStream out) {
+        try {
+            if (out != null) {
                 out.flush();
             }
-        } catch (Exception ignored)
-        {
+        } catch (Exception ignored) {
         }
-        try
-        {
-            if (out != null)
-            {
+        try {
+            if (out != null) {
                 out.close();
             }
-        } catch (Exception ignored)
-        {
+        } catch (Exception ignored) {
         }
         out = null;
     }
@@ -783,16 +702,12 @@ public class FileUtil
      *
      * @param in 파일 Reader
      */
-    public static void closeStream (Reader in)
-    {
-        try
-        {
-            if (in != null)
-            {
+    public static void closeStream(Reader in) {
+        try {
+            if (in != null) {
                 in.close();
             }
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
         }
         in = null;
     }
@@ -802,25 +717,18 @@ public class FileUtil
      *
      * @param out 파일 Writer
      */
-    public static void closeStream (Writer out)
-    {
-        try
-        {
-            if (out != null)
-            {
+    public static void closeStream(Writer out) {
+        try {
+            if (out != null) {
                 out.flush();
             }
-        } catch (Exception ignored)
-        {
+        } catch (Exception ignored) {
         }
-        try
-        {
-            if (out != null)
-            {
+        try {
+            if (out != null) {
                 out.close();
             }
-        } catch (Exception ignored)
-        {
+        } catch (Exception ignored) {
         }
         out = null;
     }
@@ -830,10 +738,8 @@ public class FileUtil
      *
      * @param path 변경할 Path
      */
-    public static String convertPathToUnixFormat (String path)
-    {
-        if (path == null)
-        {
+    public static String convertPathToUnixFormat(String path) {
+        if (path == null) {
             return "";
         }
         path = path.trim();
@@ -852,26 +758,21 @@ public class FileUtil
      * @param filter
      * @return
      */
-    public static File[] readFiles (String path, FilenameFilter filter)
-    {
-        if (StringUtils.isEmpty(path))
-        {
+    public static File[] readFiles(String path, FilenameFilter filter) {
+        if (StringUtils.isEmpty(path)) {
             return null;
         }
 
         File dir = new File(path);
 
-        if (dir.exists() == false)
-        {
+        if (dir.exists() == false) {
             return null;
         }
 
         File[] files = null;
-        if (filter == null)
-        {
+        if (filter == null) {
             files = dir.listFiles();
-        } else
-        {
+        } else {
             files = dir.listFiles(filter);
         }
 
@@ -887,37 +788,29 @@ public class FileUtil
      * @param type
      * @param desc
      */
-    public static void sortFiles (File[] files, String type, boolean desc)
-    {
-        if (ObjectUtils.isEmpty(files) || files.length == 1)
-        {
+    public static void sortFiles(File[] files, String type, boolean desc) {
+        if (ObjectUtils.isEmpty(files) || files.length == 1) {
             return;
         }
 
-        Arrays.sort(files, new Comparator<File>()
-        {
+        Arrays.sort(files, new Comparator<File>() {
 
             @Override
-            public int compare (File arg0, File arg1)
-            {
+            public int compare(File arg0, File arg1) {
                 String s1 = "";
                 String s2 = "";
 
-                if (type.equals(SORT_NAME))
-                {
+                if (type.equals(SORT_NAME)) {
                     s1 = arg0.getName();
                     s2 = arg1.getName();
-                } else if (type.equals(SORT_MODIFIED_DT))
-                {
+                } else if (type.equals(SORT_MODIFIED_DT)) {
                     s1 = String.valueOf(arg0.lastModified());
                     s2 = String.valueOf(arg1.lastModified());
                 }
 
-                if (desc)
-                {
+                if (desc) {
                     return s2.compareTo(s1);
-                } else
-                {
+                } else {
                     return s1.compareTo(s2);
                 }
             }
@@ -932,32 +825,25 @@ public class FileUtil
      * @param listFile
      * @throws IOException
      */
-    public static void moveFiles (String path, List<File> listFile)
-    {
-        if (StringUtils.isEmpty(path))
-        {
+    public static void moveFiles(String path, List<File> listFile) {
+        if (StringUtils.isEmpty(path)) {
             log.error("file move target path is empty.");
             return;
         }
 
-        if (FileUtil.exists(path) == false)
-        {
+        if (FileUtil.exists(path) == false) {
             FileUtil.makeDir(path, true);
         }
 
-        if (ObjectUtils.isEmpty(listFile))
-        {
+        if (ObjectUtils.isEmpty(listFile)) {
             return;
         }
 
-        for (File file : listFile)
-        {
+        for (File file : listFile) {
             // com.macrogen.util.FileUtil.move(file, path);
-            try
-            {
+            try {
                 Files.move(Paths.get(file.getAbsolutePath()), Paths.get(path, file.getName()));
-            } catch (IOException e)
-            {
+            } catch (IOException e) {
                 log.error(e.getMessage(), e);
                 return;
             }
@@ -970,24 +856,19 @@ public class FileUtil
      * @param path
      * @param file
      */
-    public static void moveFile (String path, File file)
-    {
-        if (StringUtils.isEmpty(path))
-        {
+    public static void moveFile(String path, File file) {
+        if (StringUtils.isEmpty(path)) {
             log.error("file move target path is empty.");
             return;
         }
 
-        if (FileUtil.exists(path) == false)
-        {
+        if (FileUtil.exists(path) == false) {
             FileUtil.makeDir(path, true);
         }
 
-        try
-        {
+        try {
             Files.move(Paths.get(file.getAbsolutePath()), Paths.get(path, file.getName()));
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             log.error(e.getMessage(), e);
         }
 
