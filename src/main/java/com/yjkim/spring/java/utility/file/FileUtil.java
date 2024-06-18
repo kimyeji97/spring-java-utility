@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import com.yjkim.spring.java.utility.os.SystemUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -48,7 +49,60 @@ public class FileUtil {
 
         return "";
     }
-
+    
+    
+    
+    /**
+     * 파일명을 추출한다.
+     *
+     * @param path          경로
+     * @param withExtension 확자자 포함 여부
+     *
+     * @return 파일명
+     */
+    public static String getFileName(String path , boolean withExtension) {
+        if (org.apache.commons.lang3.StringUtils.isBlank(path)) {
+            return null;
+        }
+        
+        if (! path.contains(".")) {
+            log.error("This is directory path.");
+        }
+        
+        SystemUtil.OS_TYPE osType = SystemUtil.getOsType();
+        String fileSeparator = osType == SystemUtil.OS_TYPE.WINDOWS ? "\\" : "/";
+        int nameStartIdx = path.lastIndexOf(fileSeparator);
+        
+        return withExtension
+                ? path.substring(nameStartIdx + 1)
+                : path.substring(nameStartIdx + 1 , path.lastIndexOf("."));
+    }
+    
+    /**
+     * 디렉토리 경로를 추출
+     *
+     * @param path
+     *
+     * @return
+     */
+    public static String getDirPath(String path) {
+        if (org.apache.commons.lang3.StringUtils.isBlank(path)) {
+            return null;
+        }
+        
+        SystemUtil.OS_TYPE osType = SystemUtil.getOsType();
+        String fileSeparator = osType == SystemUtil.OS_TYPE.WINDOWS ? "\\" : "/";
+        
+        String dirPath = path;
+        if (path.contains(".")) {
+            int nameStartIdx = path.lastIndexOf(fileSeparator);
+            dirPath = path.substring(0 , nameStartIdx);
+        }
+        
+        return dirPath.endsWith(fileSeparator) ? dirPath : dirPath + fileSeparator;
+    }
+    
+    
     /**
      * 파일을 복사 한다.
      *
