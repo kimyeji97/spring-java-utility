@@ -1,5 +1,6 @@
 package com.yjkim.spring.java.utility.spring;
 
+import lombok.experimental.UtilityClass;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -7,37 +8,13 @@ import org.springframework.stereotype.Component;
 /**
  * {@link ApplicationContext}의 Bean관련 유틸리티
  */
-@Component
-public class BeanUtil implements ApplicationContextAware
-{
-    private static ApplicationContext context;
-
-    @Override
-    public void setApplicationContext (ApplicationContext applicationContext)
-    {
-        context = applicationContext;
+@UtilityClass
+public class BeanUtil {
+    public static <T> T getBean(Class<T> classType) {
+        return ApplicationContextProvider.getApplicationContext().getBean(classType);
     }
-
-    /**
-     * 특정 타입의 Bean을 조회
-     *
-     * @param beanClass class
-     * @param <T>       타입
-     * @return 빈
-     */
-    public static <T> T getBean (Class<T> beanClass)
-    {
-        return context.getBean(beanClass);
-    }
-
-    /**
-     * 특정 이름의 bean 조회
-     *
-     * @param beanName 빈 이름
-     * @return 빈
-     */
-    public static Object getBean (String beanName)
-    {
-        return context.getBean(beanName);
+    
+    public static Object getBean(String name) {
+        return ApplicationContextProvider.getApplicationContext().getBean(name);
     }
 }
