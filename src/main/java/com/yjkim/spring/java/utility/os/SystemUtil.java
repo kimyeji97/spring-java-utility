@@ -1,5 +1,7 @@
 package com.yjkim.spring.java.utility.os;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class SystemUtil {
     public enum OS_TYPE {
         WINDOWS, MAC, LINUX, UNIX, SOLARIS, UNKNOWN;
@@ -18,5 +20,10 @@ public class SystemUtil {
             case "SOLARIS" -> OS_TYPE.SOLARIS;
             default -> OS_TYPE.UNKNOWN;
         };
+    }
+    
+    public static boolean isLocal() {
+        String property = System.getProperty("spring.profiles.active");
+        return StringUtils.equalsIgnoreCase(property , "local");
     }
 }
