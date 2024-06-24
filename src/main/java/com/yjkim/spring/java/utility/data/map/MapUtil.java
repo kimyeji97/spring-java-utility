@@ -1,5 +1,8 @@
 package com.yjkim.spring.java.utility.data.map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.ser.DefaultSerializerProvider;
 import com.yjkim.spring.java.utility.data.ReflectionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -19,6 +22,14 @@ public class MapUtil
         throw new IllegalStateException("MapUtil is utility class.");
     }
 
+    public static <T> T convertMapToObject(Map<String, String> map, Class<T> clazz)
+    {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setSerializerProvider(new DefaultSerializerProvider.Impl());
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        return objectMapper.convertValue(map, clazz);
+    }
+    
     /**
      * Object를 Map으로 변환한다.
      *

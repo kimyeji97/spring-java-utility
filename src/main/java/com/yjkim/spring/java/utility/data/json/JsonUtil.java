@@ -162,6 +162,18 @@ public class JsonUtil
         return mapper.valueToTree(obj);
     }
 
+    public static String convertObjectToString(Object obj)
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        try {
+            return mapper.writeValueAsString(obj);
+        } catch (JsonProcessingException e) {
+            log.error(e.getMessage(), e);
+            return null;
+        }
+    }
+    
     /**
      * Object를 선언된 Type으로 변경한다.
      *
