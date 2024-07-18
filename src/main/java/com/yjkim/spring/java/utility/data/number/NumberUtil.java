@@ -185,7 +185,39 @@ public class NumberUtil {
         BigDecimal result = convertNullToZero(val);
         return (result.compareTo(BigDecimal.ZERO) < 0) ? BigDecimal.ZERO : result;
     }
-
+    
+    /**
+     * 0 이하 여부
+     *
+     * @param val
+     * @return
+     */
+    public static boolean isLessThanOrEqualToZero(BigDecimal val) {
+        return val == null || val.compareTo(BigDecimal.ZERO) <= 0;
+    }
+    
+    /**
+     * 퍼센트 계산
+     *
+     * @param val
+     * @param percent
+     * @return
+     */
+    public static BigDecimal calculatePercent(BigDecimal val, int percent) {
+        if(isLessThanOrEqualToZero(val)) {
+            return val;
+        }
+        return NumberUtil.calculatePercent(val, new BigDecimal(percent));
+    }
+    
+    
+    public static BigDecimal calculatePercent(BigDecimal val, BigDecimal percent) {
+        if(isLessThanOrEqualToZero(val)) {
+            return val;
+        }
+        return val.multiply(percent.multiply(new BigDecimal(0.01)));
+    }
+    
     /**
      * 특저 단위로 반올림 처리 후 scale
      *

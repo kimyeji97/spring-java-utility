@@ -4,8 +4,10 @@ import com.yjkim.spring.java.utility.data.json.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +17,24 @@ public class URLUtil
 
     public static final String PRE_HTTP = "http://";
     public static final String PRE_HTTPS = "https://";
+    
+    public static String getDomainName(String urlStr)
+    {
+        if(StringUtils.isBlank(urlStr))
+        {
+            return StringUtils.EMPTY;
+        }
+        
+        try
+        {
+            URL url = new URL(urlStr);
+            return url.getHost().replace("www\\.", "");
+        } catch (MalformedURLException e)
+        {
+            log.error(e.getMessage(), e);
+            return StringUtils.EMPTY;
+        }
+    }
 
     public static String addQueryParam (String uri, String key, String value)
     {
