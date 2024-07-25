@@ -1,13 +1,12 @@
 package com.yjkim.spring.java.utility.data.string;
 
+import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 
-public class StringUtil
-{
-    public StringUtil ()
-    {
-        throw new IllegalStateException("StringUtil is utility class.");
-    }
+@UtilityClass
+public class StringUtil {
+    
+    public static final String REGX_NEWLINE = "(\r\n|\r|\n|\n\r)";
 
     /**
      * str이 empty인경우 dfStr 반환.
@@ -46,6 +45,21 @@ public class StringUtil
     public static String replaceQueryLikePattern (String str)
     {
         return str.replace("%", "\\%").replace("_", "\\_");
+    }
+    
+    /**
+     * 개행문자 치환
+     *
+     * @param value
+     * @param replacement
+     * @return
+     */
+    public static String replaceNewLine(String value , String replacement)
+    {
+        if (StringUtils.isBlank(value)) {
+            return value;
+        }
+        return value.replaceAll(REGX_NEWLINE, replacement);
     }
 
     /**
