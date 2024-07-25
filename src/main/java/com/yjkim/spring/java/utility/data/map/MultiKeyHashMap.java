@@ -1,9 +1,14 @@
 package com.yjkim.spring.java.utility.data.map;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * MultiKeyHashMap provides to store values with two level hierarchy of keys,
@@ -18,12 +23,38 @@ import java.util.*;
  */
 public class MultiKeyHashMap<K1, K2, V>
 {
+    @Data
+    @AllArgsConstructor
+    public static class MultiKey<K1, K2>
+    {
+        K1 key1;
+        K2 key2;
+        
+        @Override
+        public boolean equals(Object o)
+        {
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
+                return false;
+            MultiKey<?, ?> multiKey = (MultiKey<?, ?>) o;
+            return key1.equals(multiKey.key1) && key2.equals(multiKey.key2);
+        }
+        
+        @Override
+        public int hashCode()
+        {
+            return 31 * key1.hashCode() + key2.hashCode();
+        }
+    }
 
     /**
      * Map structure holding another Map structure to implement MultiKeyHashMap
      */
     private final Map<K1, Map<K2, V>> mkMap = new HashMap<>();
-
+    
+    
+    public static final MultiKeyHashMap EMPTY_MAP = new MultiKeyHashMap(ImmutableMap.builder().build());
     private final Set<K2> emptySet = ImmutableSet.<K2>builder().build();
     private final List<V> emptyValueSet = ImmutableList.<V>builder().build();
 
@@ -32,6 +63,26 @@ public class MultiKeyHashMap<K1, K2, V>
      */
     public MultiKeyHashMap ()
     {
+    }
+    
+    /**
+     * Initializes the MultiKeyHashMap by Map
+     *
+     * @param map
+     */
+    public MultiKeyHashMap(Map<K1, Map<K2, V>> map)
+    {
+        mkMap.putAll(map);
+    }
+    
+    /**
+     * Get immutable empty MultiKeyHashMap
+     *
+     * @return
+     */
+    public static MultiKeyHashMap emptyMap()
+    {
+        return EMPTY_MAP;
     }
 
     /**
@@ -55,6 +106,14 @@ public class MultiKeyHashMap<K1, K2, V>
             mkMap.put(k1, k2Map);
         }
         return k2Map.put(k2, v);
+    }
+    
+    public void putAll(MultiKeyHashMap<K1, K2, V> multiKeyHashMap)
+    {
+        for (K1 key : multiKeyHashMap.keys())
+        {
+            mkMap.put(key , multiKeyHashMap.mkMap.get(key));
+        }
     }
 
     /**
@@ -253,6 +312,14 @@ public class MultiKeyHashMap<K1, K2, V>
     {
         return mkMap.keySet();
     }
+    
+    public Set<MultiKey<K1, K2>> multiKeys()
+    {
+        return mkMap.entrySet().stream()
+                .flatMap(k1Entry -> k1Entry.getValue().keySet().stream()
+                        .map(k2 -> new MultiKey<>(k1Entry.getKey() , k2)))
+                .collect(Collectors.toSet());
+    }
 
     /**
      * key 가 존재하지 않으면 true.
@@ -305,5 +372,12 @@ public class MultiKeyHashMap<K1, K2, V>
             mkMap.put(key, defaultValue);
             return defaultValue;
         }
+    }
+    
+    public V computeIfAbsent(K1 key1 , K2 key2 , Function<? super K2, ? extends V> mappingFunction)
+    {
+        Objects.requireNonNull(mappingFunction);
+        Map<K2, V> key2map = mkMap.computeIfAbsent(key1 , k -> new HashMap<>());
+        return key2map.computeIfAbsent(key2 , mappingFunction);
     }
 }
