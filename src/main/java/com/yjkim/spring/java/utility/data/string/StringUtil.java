@@ -3,10 +3,15 @@ package com.yjkim.spring.java.utility.data.string;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 
+import java.security.SecureRandom;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 @UtilityClass
 public class StringUtil {
     
     public static final String REGX_NEWLINE = "(\r\n|\r|\n|\n\r)";
+    public static final String REGX_NOT_NUMBER = "[^0-9]";
 
     /**
      * str이 empty인경우 dfStr 반환.
@@ -77,5 +82,52 @@ public class StringUtil {
         }
 
         return StringUtils.join(StringUtils.substring(str, 0, maxLength - 3), "...");
+    }
+    
+    /**
+     * 숫자만 추출
+     * d
+     * @param str
+     * @return
+     */
+    public static String extractNumbers(String str)
+    {
+        if (StringUtils.isBlank(str))
+        {
+            return str;
+        }
+        
+        return str.replaceAll(REGX_NOT_NUMBER, "");
+    }
+    
+    /**
+     * 자릿수(length) 만큼 랜덤한 숫자 + 문자 + 특수문자 조합의 랜덤한 문자열을 출력합니다.
+     *
+     * @param length 문자의 범위
+     *
+     * @return String 숫자 + 문자 + 특수 문자 조합 문자열
+     */
+    public static String generateRandomMixAll(int length) {
+        SecureRandom secureRandom = new SecureRandom();
+        /*
+         * 1. 특수문자의 범위 33 ~ 47, 58 ~ 64, 91 ~ 96
+         * 2. 숫자의 범위 : 48 ~ 57
+         * 3. 대문자의 범위: 65 ~ 90
+         * 4. 소문자의 범위: 97 ~ 122
+         */
+        String charNSpecialChar =
+                IntStream.concat(
+                                IntStream.rangeClosed(48 , 57) ,
+                                IntStream.concat(
+                                        IntStream.rangeClosed(65 , 90) ,
+                                        IntStream.rangeClosed(97 , 122)))
+                        .mapToObj(i -> String.valueOf((char) i))
+                        .collect(Collectors.joining());
+        
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0 ; i < length ; i++) {
+            builder.append(charNSpecialChar.charAt(secureRandom.nextInt(charNSpecialChar.length())));
+        }
+        return builder.toString();
     }
 }

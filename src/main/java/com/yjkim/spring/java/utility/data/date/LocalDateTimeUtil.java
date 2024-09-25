@@ -270,4 +270,30 @@ public class LocalDateTimeUtil
             default -> throw new IllegalStateException("Unexpected value: " + field);
         };
     }
+    
+    
+    /**
+     * 특정 날짜가 두날짜 사이에 있는지 확인
+     *
+     * @param target
+     * @param start
+     * @param end
+     * @return
+     */
+    public static boolean isBetween(LocalDateTime target, LocalDateTime start, LocalDateTime end)
+    {
+        return (target.isEqual(start) || target.isAfter(start)) && (target.isEqual(end) || target.isBefore(end));
+    }
+    
+    /**
+     * 오늘이 두날짜 사이에 있는지 확인
+     *
+     * @param start
+     * @param end
+     * @return
+     */
+    public static boolean isNowBetween(LocalDateTime start, LocalDateTime end)
+    {
+        return LocalDateTimeUtil.isBetween(LocalDateTime.now(), start, end);
+    }
 }
