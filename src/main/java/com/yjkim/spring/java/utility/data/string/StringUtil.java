@@ -4,6 +4,10 @@ import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -129,5 +133,32 @@ public class StringUtil {
             builder.append(charNSpecialChar.charAt(secureRandom.nextInt(charNSpecialChar.length())));
         }
         return builder.toString();
+    }
+    
+    /**
+     * 큰따옴표를 고려한 split
+     *
+     * @param value 대상 문자열
+     * @param delimiter 구분자 (큰따옴표 안에 있는 경우 스킵)
+     * @return
+     */
+    public List<String> splitRespectingQuotes(String value, String delimiter) {
+        List<String> result = new ArrayList<>();
+        String regex = String.format("\"([^\"]*)\"|([^%s]+)", Pattern.quote(delimiter));
+        Matcher matcher = Pattern.compile(regex).matcher(value);
+        while (matcher.find())
+        {
+            // 큰따옴표로 감싸진 값
+            if (matcher.group(1) != null)
+            {
+                result.add(matcher.group(1));
+            }
+            // 일반 값
+            else
+            {
+                result.add(matcher.group(2));
+            }
+        }
+        return result;
     }
 }

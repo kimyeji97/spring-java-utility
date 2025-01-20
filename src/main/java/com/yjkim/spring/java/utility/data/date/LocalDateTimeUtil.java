@@ -282,7 +282,8 @@ public class LocalDateTimeUtil
      */
     public static boolean isBetween(LocalDateTime target, LocalDateTime start, LocalDateTime end)
     {
-        return (target.isEqual(start) || target.isAfter(start)) && (target.isEqual(end) || target.isBefore(end));
+        return ( start == null || target.isEqual(start) || target.isAfter(start) )
+               && ( end == null || target.isEqual(end) || target.isBefore(end) );
     }
     
     /**
