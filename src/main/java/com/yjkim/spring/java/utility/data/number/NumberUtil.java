@@ -80,7 +80,65 @@ public class NumberUtil {
         }
         return NumberFormat.getInstance().format(num);
     }
-
+    
+    /**
+     * null -> 0
+     *
+     * @param val
+     * @return
+     */
+    public static Integer convertNullToZero(Integer val) {
+        if (val == null) {
+            return 0;
+        }
+        return val;
+    }
+    
+    /**
+     * null 또는 음수 -> 0
+     *
+     * @param val
+     * @return
+     */
+    public static Integer convertNullOrMinusToZero(Integer val) {
+        Integer result = convertNullToZero(val);
+        return result < 1 ? 0 : result;
+    }
+    
+    /**
+     * 해당 범위 내에서 랜덤 값 추출
+     *
+     * @param start
+     * @param end
+     * @return
+     */
+    public static int randomInRange(int start, int end) {
+        if (end <= start) {
+            return -1;
+        }
+        return RANDOM.nextInt(start, end + 1);
+    }
+    
+    /**
+     * ##################################################################################
+     * Long
+     * ##################################################################################
+     */
+    
+    /**
+     * 해당 범위 내에서 랜덤 값 추출
+     *
+     * @param start
+     * @param end
+     * @return
+     */
+    public static long randomInRange(long start, long end) {
+        if (end <= start) {
+            return -1L;
+        }
+        return RANDOM.nextLong(start, end + 1);
+    }
+    
     /**
      * ##################################################################################
      * Double
@@ -124,36 +182,6 @@ public class NumberUtil {
         }
         double m = Math.pow(10.0, n);
         return Math.round(d * m) / m;
-    }
-
-    /**
-     * ##################################################################################
-     * Integer
-     * ##################################################################################
-     */
-
-    /**
-     * null -> 0
-     *
-     * @param val
-     * @return
-     */
-    public static Integer convertNullToZero(Integer val) {
-        if (val == null) {
-            return 0;
-        }
-        return val;
-    }
-
-    /**
-     * null 또는 음수 -> 0
-     *
-     * @param val
-     * @return
-     */
-    public static Integer convertNullOrMinusToZero(Integer val) {
-        Integer result = convertNullToZero(val);
-        return result < 1 ? 0 : result;
     }
 
     /**
