@@ -3,6 +3,7 @@ package com.yjkim.spring.java.utility.data.map;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.ser.DefaultSerializerProvider;
+import com.google.common.base.CaseFormat;
 import com.yjkim.spring.java.utility.data.ReflectionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -38,10 +39,15 @@ public class MapUtil
      */
     public static Map<String, Object> converObjectToMap (Object obj)
     {
-        return converObjectToMap(obj, ReflectionUtil.getPropertyDescriptors(obj.getClass()));
+        return converObjectToMap(obj, ReflectionUtil.getPropertyDescriptors(obj.getClass()), false);
     }
-
-    public static Map<String, Object> converObjectToMap (Object obj, List<PropertyDescriptor> propertyDescriptors)
+    
+    public static Map<String, Object> converObjectToSnakeCaseMap (Object obj)
+    {
+        return converObjectToMap(obj, ReflectionUtil.getPropertyDescriptors(obj.getClass()), true);
+    }
+    
+    public static Map<String, Object> converObjectToMap (Object obj, List<PropertyDescriptor> propertyDescriptors, boolean isConvertSnake)
     {
         if (obj == null)
         {
@@ -54,11 +60,12 @@ public class MapUtil
             {
                 return resultMap;
             }
-
+            
             for (PropertyDescriptor pd : propertyDescriptors)
             {
                 Object value = ReflectionUtil.invokeGetMethod(obj, pd.getReadMethod());
-                resultMap.put(pd.getName(), value);
+                String name = isConvertSnake ? CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, pd.getName()) : pd.getName();
+                resultMap.put(name, value);
             }
         } catch (IllegalArgumentException e)
         {
@@ -66,7 +73,8 @@ public class MapUtil
         }
         return resultMap;
     }
-
+    
+    
     /**
      * 두개의 Map을 비교해서 다른 new값을 리턴한다.
      *

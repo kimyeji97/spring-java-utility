@@ -108,12 +108,27 @@ public class LocalDateTimeUtil
      * 지정된 문자열의 값을 지정된 패턴으로 해석하여 날자값을 반환한다.
      *
      * @param value   String
-     * @param pattern String
+     * @param patterns String
      * @return LocalDateTime
      */
-    public static LocalDateTime parseDateTime (String value, String pattern)
+    public static LocalDateTime parseDateTime (String value, String... patterns)
     {
-        return LocalDateTime.parse(value, DateTimeFormatter.ofPattern(pattern));
+        RuntimeException exception = null;
+        for (String pattern : patterns)
+        {
+            try
+            {
+                return LocalDateTime.parse(value, DateTimeFormatter.ofPattern(pattern));
+            } catch (RuntimeException e)
+            {
+                exception = e;
+            }
+        }
+        if (exception != null)
+        {
+            throw exception;
+        }
+        return LocalDateTime.now();
     }
 
     /**
