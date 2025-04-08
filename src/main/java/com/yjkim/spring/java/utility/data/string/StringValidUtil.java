@@ -19,7 +19,7 @@ public class StringValidUtil
     // HEX color 패턴
     private static final Pattern HEX_COLOR_PATTERN = Pattern.compile("^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$");
     // 이메일 패턴
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$");
     // 우편번호 패턴
     private static final Pattern PATTERN_ZIP = Pattern.compile("^(\\d\\d\\d)?([-])?(\\d\\d\\d)?$");
     // 핸드폰 번호
@@ -28,7 +28,11 @@ public class StringValidUtil
     private static final String ZERO_TO_255 = "(\\d{1,2}|(0|1)\\d{2}|2[0-4]\\d|25[0-5])";
     private static final Pattern IP_PATTERN = Pattern.compile(
             ZERO_TO_255 + "\\." + ZERO_TO_255 + "\\." + ZERO_TO_255 + "\\." + ZERO_TO_255);
-
+    private static final Pattern BRN_PATTERN = Pattern.compile("([0-9]{3})(-?)([0-9]{2})(-?)([0-9]{5})");
+    private static final Pattern RRN_PATTERN = Pattern.compile("([0-9]{6})(-?)([0-9]{7})");
+    private static final Pattern POSTAL_PATTERN = Pattern.compile("[0-9]{5}");
+    
+    
     /**
      * mobile no 패턴 데이터인지 확인한다.
      *
@@ -239,5 +243,44 @@ public class StringValidUtil
     public static boolean isValidURL (String url)
     {
         return PATTERN_URL.matcher(url).matches();
+    }
+    
+    /**
+     * 사업자 등록 번호 체크
+     *
+     * @param brn
+     * @return
+     */
+    public static boolean isValidBRN(String brn) {
+        if (brn == null || brn.isBlank()) {
+            return false;
+        }
+        return BRN_PATTERN.matcher(brn).matches();
+    }
+    
+    /**
+     * 주민등록번호 체크
+     *
+     * @param rrn
+     * @return
+     */
+    public static boolean isValidRRN(String rrn) {
+        if (rrn == null || rrn.isBlank()) {
+            return false;
+        }
+        return RRN_PATTERN.matcher(rrn).matches();
+    }
+    
+    /**
+     * 우편번호 체크
+     *
+     * @param post
+     * @return
+     */
+    public static boolean isValidPost(String post) {
+        if (post == null || post.isBlank()) {
+            return false;
+        }
+        return POSTAL_PATTERN.matcher(post).matches();
     }
 }
