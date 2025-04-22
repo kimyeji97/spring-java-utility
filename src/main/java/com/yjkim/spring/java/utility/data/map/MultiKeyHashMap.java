@@ -374,6 +374,25 @@ public class MultiKeyHashMap<K1, K2, V>
         }
     }
     
+    /**
+     * key의 value 값 조회 (존재하지 않는 key인 경우 default값을 넣고 반환)
+     *
+     * @param key          조회 대상 키
+     * @param defaultValue 기본 값
+     * @return value or defaultValue
+     */
+    public V getOrDefault (K1 key, K2 key2,  V defaultValue)
+    {
+        if (!mkMap.containsKey(key)) {
+            Map<K2, V> k2VMap = new HashMap<>();
+            k2VMap.put(key2, defaultValue);
+            mkMap.put(key, k2VMap);
+        } else if (!mkMap.get(key).containsKey(key2)) {
+            mkMap.get(key).put(key2, defaultValue);
+        }
+        return mkMap.get(key).get(key2);
+    }
+    
     public V computeIfAbsent(K1 key1 , K2 key2 , Function<? super K2, ? extends V> mappingFunction)
     {
         Objects.requireNonNull(mappingFunction);
