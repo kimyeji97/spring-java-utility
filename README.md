@@ -13,7 +13,7 @@
 
 <div align="center">
 
-<img src="https://img.shields.io/badge/JAVA-v17-CC0000?style=flat&logo=openjdk&logoColor=white"/>
+<img src="https://img.shields.io/badge/JAVA-v21-CC0000?style=flat&logo=openjdk&logoColor=white"/>
 <img src="https://img.shields.io/badge/Spring Boot-v3.0.6-6DB33F?style=flat&logo=springboot&logoColor=white"/>
 <img src="https://img.shields.io/badge/gradle-v7.6.1-02303A?style=flat&logo=gradle&logoColor=white"/>
 
@@ -35,6 +35,7 @@ Maven repository
 - 문자열 다양한 패턴 유효성검사 로직 (이메일, IP, URL 등)
 - 문자열 특정 부분 마스킹 처리
 - 숫자 round, scale, 천단위 콤마
+- 가중치에 따른 랜덤 숫자 반환
 - Object로 Query Param 생성
 - Object와 `Map` 변환 (Object <-> Map)
 - Object와 `Json` 변환 (Object <-> Json)

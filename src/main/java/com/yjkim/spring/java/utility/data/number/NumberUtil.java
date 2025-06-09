@@ -5,8 +5,11 @@ import java.math.RoundingMode;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,16 +18,6 @@ import org.apache.commons.lang3.StringUtils;
  */
 @Slf4j
 public class NumberUtil {
-    public static Random RANDOM;
-
-    static {
-        try {
-            RANDOM = SecureRandom.getInstanceStrong();
-        } catch (NoSuchAlgorithmException e) {
-            log.error(e.getMessage());
-            RANDOM = new Random();
-        }
-    }
 
     public static <T extends Number> boolean isOrMore(T value, T num) {
         if (value == null) {
@@ -112,19 +105,69 @@ public class NumberUtil {
      * @param end
      * @return
      */
-    public static int randomInRange(int start, int end) {
-        if (end <= start) {
+    public static int randomInRange (int start, int end)
+    {
+        if (end <= start)
+        {
             return -1;
         }
-        return RANDOM.nextInt(start, end + 1);
+        return ThreadLocalRandom.current().nextInt(start, end + 1);
     }
-    
+
+    @Data
+    public static class RandomWeight
+    {
+        private int value;
+        private double weight;
+
+        public RandomWeight (int value, double weight)
+        {
+            this.value = value;
+            this.weight = weight;
+        }
+    }
+
+    public static int weightedRandom (List<RandomWeight> values)
+    {
+        if (values == null || values.isEmpty())
+        {
+            throw new IllegalArgumentException("Points list cannot be null or empty");
+        }
+
+        // 확률 합계 계산
+        double totalPercent = values.stream()
+                .mapToDouble(RandomWeight::getWeight)
+                .sum();
+
+        if (Math.abs(totalPercent - 100.0) > 0.0001)
+        {
+            throw new IllegalArgumentException("Total percentage must be 100");
+        }
+
+        // 랜덤 값 생성 (0.0 ~ 100.0)
+        double randomValue = ThreadLocalRandom.current().nextDouble() * 100.0;
+        double cumulative = 0.0;
+
+        // 누적 확률로 점수 선택
+        for (RandomWeight point : values)
+        {
+            cumulative += point.getWeight();
+            if (randomValue <= cumulative)
+            {
+                return point.getValue();
+            }
+        }
+
+        // 부동소수점 오차로 인해 마지막 점수 반환
+        return values.get(values.size() - 1).getValue();
+    }
+
     /**
      * ##################################################################################
      * Long
      * ##################################################################################
      */
-    
+
     /**
      * 해당 범위 내에서 랜덤 값 추출
      *
@@ -136,7 +179,7 @@ public class NumberUtil {
         if (end <= start) {
             return -1L;
         }
-        return RANDOM.nextLong(start, end + 1);
+        return ThreadLocalRandom.current().nextLong(start, end + 1);
     }
     
     /**
