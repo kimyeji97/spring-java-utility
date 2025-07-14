@@ -104,14 +104,21 @@ public class StringUtil {
         return str.replaceAll(REGX_NOT_NUMBER, "");
     }
     
+    public static String generateRandomMixAll(int length) {
+        return StringUtil.generateRandom(length, true, true);
+    }
+    
+    public static String generateRandomNumber(int length) {
+        return StringUtil.generateRandom(length, false, false);
+    }
+    
     /**
-     * 자릿수(length) 만큼 랜덤한 숫자 + 문자 + 특수문자 조합의 랜덤한 문자열을 출력합니다.
+     * 자릿수(length) 만큼 랜덤한 숫자 + 문자 조합의 랜덤한 문자열을 출력합니다.
      *
      * @param length 문자의 범위
-     *
      * @return String 숫자 + 문자 + 특수 문자 조합 문자열
      */
-    public static String generateRandomMixAll(int length) {
+    private static String generateRandom(int length, boolean useUpper, boolean useLower) {
         SecureRandom secureRandom = new SecureRandom();
         /*
          * 1. 특수문자의 범위 33 ~ 47, 58 ~ 64, 91 ~ 96
@@ -119,14 +126,18 @@ public class StringUtil {
          * 3. 대문자의 범위: 65 ~ 90
          * 4. 소문자의 범위: 97 ~ 122
          */
-        String charNSpecialChar =
-                IntStream.concat(
-                                IntStream.rangeClosed(48 , 57) ,
-                                IntStream.concat(
-                                        IntStream.rangeClosed(65 , 90) ,
-                                        IntStream.rangeClosed(97 , 122)))
-                        .mapToObj(i -> String.valueOf((char) i))
-                        .collect(Collectors.joining());
+        IntStream range = IntStream.rangeClosed(48, 57);
+        IntStream upperRange = IntStream.rangeClosed(65, 90);
+        IntStream lowerRange = IntStream.rangeClosed(97, 122);
+        if (useUpper) {
+            range = IntStream.concat(range, upperRange);
+        }
+        if (useLower) {
+            range = IntStream.concat(range, lowerRange);
+        }
+        String charNSpecialChar = range
+                .mapToObj(i -> String.valueOf((char) i))
+                .collect(Collectors.joining());
         
         StringBuilder builder = new StringBuilder();
         for (int i = 0 ; i < length ; i++) {
