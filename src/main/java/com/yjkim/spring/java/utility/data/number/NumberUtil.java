@@ -226,6 +226,24 @@ public class NumberUtil {
         double m = Math.pow(10.0, n);
         return Math.round(d * m) / m;
     }
+    
+    /**
+     * 해당 범위 내에서 랜덤 값 추출
+     *
+     * @param start
+     * @param end
+     * @return
+     */
+    public static double randomInRange(double start, double end) {
+        if (end <= start) {
+            return -1.0;
+        }
+        return ThreadLocalRandom.current().nextDouble(start, end + 1.0);
+    }
+    
+    public static boolean isInteger(double num) {
+        return num == (int) num;
+    }
 
     /**
      * ##################################################################################
