@@ -301,6 +301,36 @@ public class LocalDateTimeUtil
                && ( end == null || target.isEqual(end) || target.isBefore(end) );
     }
     
+    
+    /**
+     * 특정 날짜가 두날짜 사이에 있는지 확인
+     *
+     * @param target
+     * @param start
+     * @param end
+     * @return
+     */
+    public static boolean isBetween(LocalDate target, LocalDate start, LocalDate end)
+    {
+        return ( start == null || target.isEqual(start) || target.isAfter(start) )
+               && ( end == null || target.isEqual(end) || target.isBefore(end) );
+    }
+    
+    /**
+     * 특정 시각이 두 시각 사이에 있는지 확인
+     *
+     * @param target
+     * @param start
+     * @param end
+     * @return
+     */
+    public static boolean isBetween(LocalTime target, LocalTime start, LocalTime end)
+    {
+        return ( start == null || target.compareTo(start) == 0 || target.isAfter(start) )
+               && ( end == null || target.compareTo(end) == 0 || target.isBefore(end) );
+    }
+    
+    
     /**
      * 오늘이 두날짜 사이에 있는지 확인
      *
@@ -311,5 +341,29 @@ public class LocalDateTimeUtil
     public static boolean isNowBetween(LocalDateTime start, LocalDateTime end)
     {
         return LocalDateTimeUtil.isBetween(LocalDateTime.now(), start, end);
+    }
+    
+    
+    /**
+     * 현재 시각이 시각이 두 시각 사이에 있는지 확인
+     *
+     * @param start
+     * @param end
+     * @return
+     */
+    public static boolean isNowBetween(LocalTime start, LocalTime end)
+    {
+        return LocalDateTimeUtil.isBetween(LocalTime.now(), start, end);
+    }
+    
+    
+    public static LocalDateTime atEndOfDay(LocalDateTime day) {
+        LocalDate date = day.toLocalDate();
+        return date.atTime(23, 59, 59, 999_999_999); // 23:59:59.999999999
+    }
+    
+    public static LocalDateTime atStartOfDay(LocalDateTime day) {
+        LocalDate date = day.toLocalDate();
+        return date.atTime(0, 0, 0, 0); // 00:00:00.0
     }
 }
