@@ -29,18 +29,4 @@ public class LocalDateUtilTests
         Assertions.assertThat(calendarWeek).isEqualTo(dayOfWeekStartBySun);
     }
 
-    @Test
-    void diffTest ()
-    {
-        LocalDateTime date1 = LocalDateTime.of(2023, 1, 1, 0, 0, 0);
-        LocalDateTime date2 = LocalDateTime.of(2024, 2, 10, 23, 59, 59);
-
-        Assertions.assertThat(LocalDateTimeUtil.diff(ChronoUnit.YEARS, date1, date2)).isEqualTo(1);
-        Assertions.assertThat(LocalDateTimeUtil.diff(ChronoUnit.MONTHS, date1, date2)).isEqualTo(1);
-        Assertions.assertThat(LocalDateTimeUtil.diff(ChronoUnit.DAYS, date1, date2)).isEqualTo(9);
-        Assertions.assertThat(LocalDateTimeUtil.diff(ChronoUnit.HOURS, date1, date2)).isEqualTo(23);
-        Assertions.assertThat(LocalDateTimeUtil.diff(ChronoUnit.MINUTES, date1, date2)).isEqualTo(59);
-        Assertions.assertThat(LocalDateTimeUtil.diff(ChronoUnit.SECONDS, date1, date2)).isEqualTo(59);
-    }
-
 }

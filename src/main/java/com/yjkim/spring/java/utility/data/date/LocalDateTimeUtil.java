@@ -1,13 +1,15 @@
 package com.yjkim.spring.java.utility.data.date;
 
+import com.yjkim.spring.java.utility.data.number.NumberUtil;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
+import java.time.temporal.Temporal;
+import java.util.*;
 
 /**
  * {@link LocalDate}, {@link LocalTime}와 {@link LocalDateTime}를 다루는 유틸리티
@@ -262,28 +264,134 @@ public class LocalDateTimeUtil
         }
         return age;
     }
-
+    
     /**
-     * 두 날짜간의 차이 반환
+     * 두 날짜 간의 차이를 지정된 ChronoUnit 단위로 반환하며, 지정된 모드에 따라 하위 단위를 처리한다.
      *
-     * @param field {@link ChronoUnit} 차이 계산할 단위 (연,월,일,시,분,초,나노)
-     * @param date1 첫번재 날짜
-     * @param date2 두번째 날짜
-     * @return
+     * @param field ChronoUnit 차이 계산 단위 (연, 월, 일, 시, 분, 초, 나노초 등)
+     * @param date1 첫 번째 날짜
+     * @param date2 두 번째 날짜
+     * @param mode  반올림 모드 (ROUND, CEIL, FLOOR)
+     * @return date2 - date1의 차이를 field 단위로 처리하여 반환 (int)
+     *
+     * @throws IllegalArgumentException date1, date2, field, mode가 null이거나 지원되지 않는 ChronoUnit
      */
-    public static int diff (ChronoUnit field, LocalDateTime date1, LocalDateTime date2)
+    public static int diff(ChronoUnit field, LocalDateTime date1, LocalDateTime date2, RoundingMode mode)
     {
-        return switch (field)
-        {
-            case YEARS -> Period.between(date1.toLocalDate(), date2.toLocalDate()).getYears();
-            case MONTHS -> Period.between(date1.toLocalDate(), date2.toLocalDate()).getMonths();
-            case DAYS -> Period.between(date1.toLocalDate(), date2.toLocalDate()).getDays();
-            case HOURS -> LocalTime.of(0, 0).plusSeconds(Duration.between(date1, date2).getSeconds()).getHour();
-            case MINUTES -> LocalTime.of(0, 0).plusSeconds(Duration.between(date1, date2).getSeconds()).getMinute();
-            case SECONDS -> LocalTime.of(0, 0).plusSeconds(Duration.between(date1, date2).getSeconds()).getSecond();
-            case NANOS -> LocalTime.of(0, 0).plusSeconds(Duration.between(date1, date2).getSeconds()).getNano();
-            default -> throw new IllegalStateException("Unexpected value: " + field);
+        if (date1 == null || date2 == null || field == null || mode == null) {
+            throw new IllegalArgumentException("date1, date2, field, and mode must not be null");
+        }
+        
+        return switch (field) {
+            case YEARS -> {
+                Period period = Period.between(date1.toLocalDate(), date2.toLocalDate());
+                int years = period.getYears();
+                int months = period.getMonths();
+                BigDecimal value = new BigDecimal(years).add(new BigDecimal(months).divide(new BigDecimal(12), 10, RoundingMode.HALF_UP));
+                yield NumberUtil.scale(value, 1, 0, mode).intValue();
+            }
+            case MONTHS -> {
+                Period period = Period.between(date1.toLocalDate(), date2.toLocalDate());
+                int months = period.getYears() * 12 + period.getMonths();
+                int days = period.getDays();
+                BigDecimal value = new BigDecimal(months).add(new BigDecimal(days).divide(new BigDecimal(30), 10, RoundingMode.HALF_UP));
+                yield NumberUtil.scale(value, 1, 0, mode).intValue();
+            }
+            case DAYS -> {
+                Duration duration = Duration.between(date1, date2);
+                long days = duration.toDays();
+                long hours = duration.minusDays(days).toHours();
+                BigDecimal value = new BigDecimal(days).add(new BigDecimal(hours).divide(new BigDecimal(24), 10, RoundingMode.HALF_UP));
+                yield NumberUtil.scale(value, 1, 0, mode).intValue();
+            }
+            case HOURS -> {
+                Duration duration = Duration.between(date1, date2);
+                long hours = duration.toHours();
+                long minutes = duration.minusHours(hours).toMinutes();
+                BigDecimal value = new BigDecimal(hours).add(new BigDecimal(minutes).divide(new BigDecimal(60), 10, RoundingMode.HALF_UP));
+                yield NumberUtil.scale(value, 1, 0, mode).intValue();
+            }
+            case MINUTES -> {
+                Duration duration = Duration.between(date1, date2);
+                long minutes = duration.toMinutes();
+                long seconds = duration.minusMinutes(minutes).getSeconds();
+                BigDecimal value = new BigDecimal(minutes).add(new BigDecimal(seconds).divide(new BigDecimal(60), 10, RoundingMode.HALF_UP));
+                yield NumberUtil.scale(value, 1, 0, mode).intValue();
+            }
+            case SECONDS -> {
+                Duration duration = Duration.between(date1, date2);
+                long seconds = duration.getSeconds();
+                long nanos = duration.minusSeconds(seconds).toNanos();
+                BigDecimal value = new BigDecimal(seconds).add(new BigDecimal(nanos).divide(new BigDecimal(1_000_000_000), 10, RoundingMode.HALF_UP));
+                yield NumberUtil.scale(value, 1, 0, mode).intValue();
+            }
+            case NANOS -> (int) Duration.between(date1, date2).toNanos(); // 나노초 이하 단위 없으므로 반올림 불필요
+            default -> throw new IllegalArgumentException("Unsupported ChronoUnit: " + field);
         };
+    }
+    
+    /**
+     * 가변 목록에서 가장 작은 날짜/시간 반환
+     *
+     * @param dateTimes
+     * @return
+     * @param <T>
+     */
+    public static <T extends Temporal & Comparable<? super T>> T  findMin(T... dateTimes)
+    {
+        return LocalDateTimeUtil.findMin(List.of(dateTimes));
+    }
+    
+    /**
+     * 리스트에서 가장 작은 날짜/시간 반환
+     *
+     * @param list
+     * @return
+     * @param <T>
+     */
+    public static <T extends Temporal & Comparable<? super T>> T  findMin(List<T> list)
+    {
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        
+        return list.stream()
+                .filter(Objects::nonNull)
+                .min(T::compareTo)
+                .orElse(null);
+    }
+    
+    
+    
+    /**
+     * 가변 목록에서 가장 큰 날짜/시간 반환
+     *
+     * @param dateTimes
+     * @return
+     * @param <T>
+     */
+    public static <T extends Temporal & Comparable<? super T>> T  findMax(T... dateTimes)
+    {
+        return LocalDateTimeUtil.findMax(List.of(dateTimes));
+    }
+    
+    /**
+     * 리스트에서 가장 큰 날짜/시간 반환
+     *
+     * @param list
+     * @return
+     * @param <T>
+     */
+    public static <T extends Temporal & Comparable<? super T>> T  findMax(List<T> list)
+    {
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        
+        return list.stream()
+                .filter(Objects::nonNull)
+                .max(T::compareTo)
+                .orElse(null);
     }
     
     
