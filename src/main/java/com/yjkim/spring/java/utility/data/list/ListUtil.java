@@ -3,10 +3,10 @@ package com.yjkim.spring.java.utility.data.list;
 import com.sun.jdi.InternalException;
 import org.apache.commons.lang3.ObjectUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.security.SecureRandom;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -138,5 +138,60 @@ public class ListUtil
             throw new InternalException("index more then list size.");
         }
         return list.get(index);
+    }
+    
+    
+    /**
+     * 그룹핑된 기준으로 1개 랜덤으로 필터링
+     *
+     * @param list
+     * @param randomGrouper
+     * @return
+     * @param <T>
+     * @param <K>
+     */
+    public static <T, K> List<T> drawRandomMatchingFilter(List<T> list, Function<T, K> randomGrouper) {
+        return ListUtil.drawRandomMatchingFilter(list, randomGrouper, 1);
+    }
+    
+    /**
+     * 그룹핑된 기준으로 n개 랜덤으로 필터링
+     *
+     * @param list
+     * @param randomGrouper
+     * @param drawCnt
+     * @return
+     * @param <T>
+     * @param <K>
+     */
+    public static <T, K> List<T> drawRandomMatchingFilter(List<T> list, Function<T, K> randomGrouper, int drawCnt)
+    {
+        if (ObjectUtils.isEmpty(list) || drawCnt < 1)
+        {
+            return Collections.emptyList();
+        }
+        
+        // 그룹핑: grouper로 키를 추출해 맵으로 그룹화
+        Map<K, List<T>> grouped = list.stream().collect(Collectors.groupingBy(randomGrouper));
+        
+        // 각 그룹에서 랜덤으로 최대 count개 선택
+        SecureRandom random = new SecureRandom();
+        List<T> result = new ArrayList<>();
+        
+        for (List<T> group : grouped.values())
+        {
+            // 그룹 크기와 count 중 작은 값만큼 선택
+            int itemsToSelect = Math.min(group.size(), drawCnt);
+            if (itemsToSelect == 0) {
+                continue;
+            }
+            
+            // 그룹 내에서 셔플 후 상위 itemsToSelect개 선택
+            List<T> shuffled = new ArrayList<>(group);
+            Collections.shuffle(shuffled, random);
+            result.addAll(shuffled.subList(0, itemsToSelect));
+        }
+        
+        return result;
     }
 }

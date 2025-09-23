@@ -17,7 +17,12 @@ import java.util.*;
 public class LocalDateTimeUtil
 {
     public static final ZoneId ZONE_ASIA_SEOUL = ZoneId.of("Asia/Seoul");
-
+    
+    public static long getCurrentTimestamp()
+    {
+        return Timestamp.valueOf(LocalDateTime.now()).getTime();
+    }
+    
     /**
      * 해당 날짜의 Month int 값 반환
      * <pre>
@@ -396,46 +401,85 @@ public class LocalDateTimeUtil
     
     
     /**
-     * 특정 날짜가 두날짜 사이에 있는지 확인
+     * 특정 날짜가 임계값 범위 여부 (미만/초과)
+     * @param target
+     * @param start
+     * @param end
+     * @return
+     */
+    public static boolean isBetweenExclusive(LocalDateTime target, LocalDateTime start, LocalDateTime end)
+    {
+        return (start == null || target.isAfter(start))
+               && (end == null || target.isBefore(end));
+    }
+    
+    /**
+     * 특정 날짜가 임계값 범위 여부 (미만/초과)
+     * @param target
+     * @param start
+     * @param end
+     * @return
+     */
+    public static boolean isBetweenExclusive(LocalDate target, LocalDate start, LocalDate end)
+    {
+        return (start == null || target.isAfter(start))
+               && (end == null || target.isBefore(end));
+    }
+    
+    /**
+     * 특정 날짜가 임계값 범위 여부 (미만/초과)
+     * @param target
+     * @param start
+     * @param end
+     * @return
+     */
+    public static boolean isBetweenExclusive(LocalTime target, LocalTime start, LocalTime end)
+    {
+        return (start == null || target.isAfter(start))
+               && (end == null || target.isBefore(end));
+    }
+    
+    /**
+     * 특정 날짜가 두날짜 사이에 있는지 확인 (이상/이하)
      *
      * @param target
      * @param start
      * @param end
      * @return
      */
-    public static boolean isBetween(LocalDateTime target, LocalDateTime start, LocalDateTime end)
+    public static boolean isBetweenInclusive(LocalDateTime target, LocalDateTime start, LocalDateTime end)
     {
-        return ( start == null || target.isEqual(start) || target.isAfter(start) )
-               && ( end == null || target.isEqual(end) || target.isBefore(end) );
+        return (start == null || target.isEqual(start) || target.isAfter(start))
+               && (end == null || target.isEqual(end) || target.isBefore(end));
     }
     
     
     /**
-     * 특정 날짜가 두날짜 사이에 있는지 확인
+     * 특정 날짜가 두날짜 사이에 있는지 확인 (이상/이하)
      *
      * @param target
      * @param start
      * @param end
      * @return
      */
-    public static boolean isBetween(LocalDate target, LocalDate start, LocalDate end)
+    public static boolean isBetweenInclusive(LocalDate target, LocalDate start, LocalDate end)
     {
-        return ( start == null || target.isEqual(start) || target.isAfter(start) )
-               && ( end == null || target.isEqual(end) || target.isBefore(end) );
+        return (start == null || target.isEqual(start) || target.isAfter(start))
+               && (end == null || target.isEqual(end) || target.isBefore(end));
     }
     
     /**
-     * 특정 시각이 두 시각 사이에 있는지 확인
+     * 특정 시각이 두 시각 사이에 있는지 확인 (이상/이하)
      *
      * @param target
      * @param start
      * @param end
      * @return
      */
-    public static boolean isBetween(LocalTime target, LocalTime start, LocalTime end)
-    {
-        return ( start == null || target.compareTo(start) == 0 || target.isAfter(start) )
-               && ( end == null || target.compareTo(end) == 0 || target.isBefore(end) );
+    public static boolean isBetweenInclusive(LocalTime target, LocalTime start, LocalTime end) {
+        
+        return (start == null || target.compareTo(start) == 0 || target.isAfter(start))
+               && (end == null || target.compareTo(end) == 0 || target.isBefore(end));
     }
     
     
@@ -446,9 +490,9 @@ public class LocalDateTimeUtil
      * @param end
      * @return
      */
-    public static boolean isNowBetween(LocalDateTime start, LocalDateTime end)
+    public static boolean isNowBetweenInclusive(LocalDateTime start, LocalDateTime end)
     {
-        return LocalDateTimeUtil.isBetween(LocalDateTime.now(), start, end);
+        return LocalDateTimeUtil.isBetweenInclusive(LocalDateTime.now(), start, end);
     }
     
     
@@ -459,9 +503,9 @@ public class LocalDateTimeUtil
      * @param end
      * @return
      */
-    public static boolean isNowBetween(LocalTime start, LocalTime end)
+    public static boolean isNowBetweenInclusive(LocalTime start, LocalTime end)
     {
-        return LocalDateTimeUtil.isBetween(LocalTime.now(), start, end);
+        return LocalDateTimeUtil.isBetweenInclusive(LocalTime.now(), start, end);
     }
     
     
