@@ -9,6 +9,8 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.WeekFields;
 import java.util.*;
 
 /**
@@ -22,6 +24,17 @@ public class LocalDateTimeUtil
     {
         return Timestamp.valueOf(LocalDateTime.now()).getTime();
     }
+    
+    public static long getTimestamp(LocalDate date)
+    {
+        return Timestamp.valueOf(date.atStartOfDay()).getTime();
+    }
+    
+    public static long getTimestamp(LocalDateTime dateTime)
+    {
+        return Timestamp.valueOf(dateTime).getTime();
+    }
+    
     
     /**
      * 해당 날짜의 Month int 값 반환
@@ -50,7 +63,18 @@ public class LocalDateTimeUtil
     {
         return (date.getDayOfWeek().getValue() + 1) % 7;
     }
-
+    
+    /**
+     * 타임스템프 시간 값으로 LocalDateTime 객체 반환
+     *
+     * @param time
+     * @return
+     */
+    public static LocalDate getLocalDate (long time)
+    {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault()).toLocalDate();
+    }
+    
     /**
      * 타임스템프 시간 값으로 LocalDateTime 객체 반환
      *
@@ -517,5 +541,116 @@ public class LocalDateTimeUtil
     public static LocalDateTime atStartOfDay(LocalDateTime day) {
         LocalDate date = day.toLocalDate();
         return date.atTime(0, 0, 0, 0); // 00:00:00.0
+    }
+    
+    public static LocalDateTime minusAtStartOfUnit(LocalDateTime date, ChronoUnit unit, int value) {
+        return switch (unit) {
+            case SECONDS -> date.truncatedTo(ChronoUnit.SECONDS).minusSeconds(value);
+            case MINUTES -> date.truncatedTo(ChronoUnit.MINUTES).minusMinutes(value);
+            case HOURS -> date.truncatedTo(ChronoUnit.HOURS).minusHours(value);
+            case DAYS -> date.truncatedTo(ChronoUnit.DAYS).minusDays(value);
+            case WEEKS -> date.truncatedTo(ChronoUnit.WEEKS).minusWeeks(value);
+            case MONTHS -> date.truncatedTo(ChronoUnit.MONTHS).minusMonths(value);
+            case YEARS -> date.truncatedTo(ChronoUnit.YEARS).minusYears(value);
+            default -> null;
+        };
+    }
+    
+    public static LocalDateTime plusAtStartOfUnit(LocalDateTime date, ChronoUnit unit, int value) {
+        return switch (unit) {
+            case SECONDS -> date.truncatedTo(ChronoUnit.SECONDS).plusSeconds(value);
+            case MINUTES -> date.truncatedTo(ChronoUnit.MINUTES).plusMinutes(value);
+            case HOURS -> date.truncatedTo(ChronoUnit.HOURS).plusHours(value);
+            case DAYS -> date.truncatedTo(ChronoUnit.DAYS).plusDays(value);
+            case WEEKS -> date.truncatedTo(ChronoUnit.WEEKS).plusWeeks(value);
+            case MONTHS -> date.truncatedTo(ChronoUnit.MONTHS).plusMonths(value);
+            case YEARS -> date.truncatedTo(ChronoUnit.YEARS).plusYears(value);
+            default -> null;
+        };
+    }
+    
+    
+    /**
+     * 해당 연도의 주차를 계산
+     *
+     * @param localDate
+     * @return [해당 주의 첫번째 날짜, 문자열]
+     */
+    public static Object[] getYearWeek(LocalDate localDate) {
+        if (localDate == null) {
+            return null;
+        }
+        
+        // ISO-8601 기준 주차 계산 (월요일 시작)
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+        int weekOfYear = localDate.get(weekFields.weekOfYear());
+        int year = localDate.getYear();
+        
+        // 주간의 첫 번째 날짜
+        LocalDate firstDayOfWeek = localDate.with(TemporalAdjusters.previousOrSame(weekFields.getFirstDayOfWeek()));
+        
+        // 반환 타입 결정 (문자열로 우선 구현)
+        return new Object[] {firstDayOfWeek, String.format("%d년 %d번째 주", year, weekOfYear)};
+    }
+    
+    /**
+     * 해당 주의 첫번째 날짜를 기준으로 주차를 계산
+     *
+     * @param localDate
+     * @return [해당 주의 첫번째 날짜, 문자열]
+     */
+    public static Object[] getMonthWeekByFirstDay(LocalDate localDate) {
+        if (localDate == null) {
+            return null;
+        }
+        
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+        
+        LocalDate firstDayOfWeek = localDate.with(TemporalAdjusters.previousOrSame(weekFields.getFirstDayOfWeek()));
+        int month = firstDayOfWeek.getMonthValue();
+        int weekOfMonth = firstDayOfWeek.get(weekFields.weekOfMonth());
+        return new Object[] {firstDayOfWeek, String.format("%d월 %d째 주", month, weekOfMonth)};
+    }
+    
+    /**
+     * 해당 주의 마지막 날짜를 기준으로 주차를 계산
+     *
+     * @param localDate
+     * @return [해당 주의 첫번째 날짜, 문자열]
+     */
+    public static Object[] getMonthWeekByLastDay(LocalDate localDate) {
+        if (localDate == null) {
+            return null;
+        }
+        
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+        
+        LocalDate firstDayOfWeek = localDate.with(TemporalAdjusters.previousOrSame(weekFields.getFirstDayOfWeek()));
+        LocalDate lastDayOfWeek = firstDayOfWeek.plusDays(6);
+        int month = lastDayOfWeek.getMonthValue();
+        int weekOfMonth = lastDayOfWeek.get(weekFields.weekOfMonth());
+        return new Object[] {lastDayOfWeek, String.format("%d월 %d째 주", month, weekOfMonth)};
+    }
+    
+    /**
+     * 해당 월에서의 주차를 계산
+     *
+     * @param localDate
+     * @return [해당 주의 첫번째 날짜, 문자열]
+     */
+    public static Object[] getMonthWeekByMonth(LocalDate localDate) {
+        if (localDate == null) {
+            return null;
+        }
+        
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+        
+        LocalDate firstDayOfWeek = localDate.with(TemporalAdjusters.previousOrSame(weekFields.getFirstDayOfWeek()));
+        int month = localDate.getMonthValue();
+        int weekOfMonth = localDate.get(weekFields.weekOfMonth());
+        if (weekOfMonth == 1) {
+            firstDayOfWeek = LocalDate.of(localDate.getYear(), month, 1);
+        }
+        return new Object[] {firstDayOfWeek, String.format("%d월 %d째 주", month, weekOfMonth)};
     }
 }
