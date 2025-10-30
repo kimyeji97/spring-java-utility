@@ -543,6 +543,15 @@ public class LocalDateTimeUtil
         return date.atTime(0, 0, 0, 0); // 00:00:00.0
     }
     
+    public static LocalDate atStartOfMonth(LocalDate day) {
+        return LocalDate.of(day.getYear(), day.getMonth(), 1);
+    }
+    
+    public static LocalDate atEndOfMonth(LocalDate day) {
+        LocalDate nextMonthDay = day.plusMonths(1);
+        return LocalDate.of(nextMonthDay.getYear(), nextMonthDay.getMonth(), 1).minusDays(1);
+    }
+    
     public static LocalDateTime minusAtStartOfUnit(LocalDateTime date, ChronoUnit unit, int value) {
         return switch (unit) {
             case SECONDS -> date.truncatedTo(ChronoUnit.SECONDS).minusSeconds(value);
