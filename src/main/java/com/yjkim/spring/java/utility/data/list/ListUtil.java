@@ -194,4 +194,46 @@ public class ListUtil
         
         return result;
     }
+    
+    public static <T, K> List<T> sortPreKey(List<T> list, Function<T, K> keyGetter, Function<T, K> preKeyGetter) {
+        if (list == null || list.size() <= 1) return list;
+        
+        Map<K, T> keyToItem = new HashMap<>();
+        Map<K, List<T>> preKeyToItems = new HashMap<>();
+        Set<K> allKeys = new HashSet<>();
+        
+        // 1. 매핑
+        for (T item : list) {
+            K key = keyGetter.apply(item);
+            K preKey = preKeyGetter.apply(item);
+            keyToItem.put(key, item);
+            preKeyToItems.computeIfAbsent(preKey, k -> new ArrayList<>()).add(item);
+            allKeys.add(key);
+        }
+        
+        List<T> result = new ArrayList<>();
+        LinkedList<K> queue = new LinkedList<>();
+        
+        // 2. 루트 노드 (preKey == null) 큐에 추가
+        for (T item : list) {
+            if (preKeyGetter.apply(item) == null) {
+                queue.add(keyGetter.apply(item));
+            }
+        }
+        
+        // 3. 위상 정렬 (Kahn's Algorithm)
+        while (!queue.isEmpty()) {
+            K key = queue.poll();
+            T item = keyToItem.get(key);
+            result.add(item);
+            
+            List<T> children = preKeyToItems.getOrDefault(key, Collections.emptyList());
+            for (T child : children) {
+                K childKey = keyGetter.apply(child);
+                queue.add(childKey);
+            }
+        }
+        
+        return result;
+    }
 }

@@ -19,6 +19,7 @@ import java.util.*;
 public class LocalDateTimeUtil
 {
     public static final ZoneId ZONE_ASIA_SEOUL = ZoneId.of("Asia/Seoul");
+    private static final WeekFields WEEK_FIELDS = WeekFields.ISO;
     
     public static long getCurrentTimestamp()
     {
@@ -543,6 +544,16 @@ public class LocalDateTimeUtil
         return date.atTime(0, 0, 0, 0); // 00:00:00.0
     }
     
+    public static LocalDateTime atStartOfWeekly(LocalDateTime day) {
+        LocalDateTime startDt = day.with(TemporalAdjusters.previousOrSame(WEEK_FIELDS.getFirstDayOfWeek()));
+        return atStartOfDay(startDt);
+    }
+    
+    public static LocalDateTime atEndOfWeekly(LocalDateTime day) {
+        LocalDateTime startDt = atStartOfWeekly(day);
+        return atEndOfDay(startDt.plusDays(6));
+    }
+    
     public static LocalDate atStartOfMonth(LocalDate day) {
         return LocalDate.of(day.getYear(), day.getMonth(), 1);
     }
@@ -590,13 +601,11 @@ public class LocalDateTimeUtil
             return null;
         }
         
-        // ISO-8601 기준 주차 계산 (월요일 시작)
-        WeekFields weekFields = WeekFields.of(Locale.getDefault());
-        int weekOfYear = localDate.get(weekFields.weekOfYear());
+        int weekOfYear = localDate.get(WEEK_FIELDS.weekOfYear());
         int year = localDate.getYear();
         
         // 주간의 첫 번째 날짜
-        LocalDate firstDayOfWeek = localDate.with(TemporalAdjusters.previousOrSame(weekFields.getFirstDayOfWeek()));
+        LocalDate firstDayOfWeek = localDate.with(TemporalAdjusters.previousOrSame(WEEK_FIELDS.getFirstDayOfWeek()));
         
         // 반환 타입 결정 (문자열로 우선 구현)
         return new Object[] {firstDayOfWeek, String.format("%d년 %d번째 주", year, weekOfYear)};
@@ -613,11 +622,10 @@ public class LocalDateTimeUtil
             return null;
         }
         
-        WeekFields weekFields = WeekFields.of(Locale.getDefault());
         
-        LocalDate firstDayOfWeek = localDate.with(TemporalAdjusters.previousOrSame(weekFields.getFirstDayOfWeek()));
+        LocalDate firstDayOfWeek = localDate.with(TemporalAdjusters.previousOrSame(WEEK_FIELDS.getFirstDayOfWeek()));
         int month = firstDayOfWeek.getMonthValue();
-        int weekOfMonth = firstDayOfWeek.get(weekFields.weekOfMonth());
+        int weekOfMonth = firstDayOfWeek.get(WEEK_FIELDS.weekOfMonth());
         return new Object[] {firstDayOfWeek, String.format("%d월 %d째 주", month, weekOfMonth)};
     }
     
@@ -632,12 +640,10 @@ public class LocalDateTimeUtil
             return null;
         }
         
-        WeekFields weekFields = WeekFields.of(Locale.getDefault());
-        
-        LocalDate firstDayOfWeek = localDate.with(TemporalAdjusters.previousOrSame(weekFields.getFirstDayOfWeek()));
+        LocalDate firstDayOfWeek = localDate.with(TemporalAdjusters.previousOrSame(WEEK_FIELDS.getFirstDayOfWeek()));
         LocalDate lastDayOfWeek = firstDayOfWeek.plusDays(6);
         int month = lastDayOfWeek.getMonthValue();
-        int weekOfMonth = lastDayOfWeek.get(weekFields.weekOfMonth());
+        int weekOfMonth = lastDayOfWeek.get(WEEK_FIELDS.weekOfMonth());
         return new Object[] {lastDayOfWeek, String.format("%d월 %d째 주", month, weekOfMonth)};
     }
     
@@ -652,11 +658,9 @@ public class LocalDateTimeUtil
             return null;
         }
         
-        WeekFields weekFields = WeekFields.of(Locale.getDefault());
-        
-        LocalDate firstDayOfWeek = localDate.with(TemporalAdjusters.previousOrSame(weekFields.getFirstDayOfWeek()));
+        LocalDate firstDayOfWeek = localDate.with(TemporalAdjusters.previousOrSame(WEEK_FIELDS.getFirstDayOfWeek()));
         int month = localDate.getMonthValue();
-        int weekOfMonth = localDate.get(weekFields.weekOfMonth());
+        int weekOfMonth = localDate.get(WEEK_FIELDS.weekOfMonth());
         if (weekOfMonth == 1) {
             firstDayOfWeek = LocalDate.of(localDate.getYear(), month, 1);
         }
