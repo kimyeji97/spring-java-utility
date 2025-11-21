@@ -563,15 +563,17 @@ public class LocalDateTimeUtil
         return LocalDate.of(nextMonthDay.getYear(), nextMonthDay.getMonth(), 1).minusDays(1);
     }
     
+    
     public static LocalDateTime minusAtStartOfUnit(LocalDateTime date, ChronoUnit unit, int value) {
         return switch (unit) {
             case SECONDS -> date.truncatedTo(ChronoUnit.SECONDS).minusSeconds(value);
             case MINUTES -> date.truncatedTo(ChronoUnit.MINUTES).minusMinutes(value);
             case HOURS -> date.truncatedTo(ChronoUnit.HOURS).minusHours(value);
             case DAYS -> date.truncatedTo(ChronoUnit.DAYS).minusDays(value);
-            case WEEKS -> date.truncatedTo(ChronoUnit.WEEKS).minusWeeks(value);
-            case MONTHS -> date.truncatedTo(ChronoUnit.MONTHS).minusMonths(value);
-            case YEARS -> date.truncatedTo(ChronoUnit.YEARS).minusYears(value);
+            case WEEKS ->
+                    date.with(TemporalAdjusters.previousOrSame(WEEK_FIELDS.getFirstDayOfWeek())).truncatedTo(ChronoUnit.DAYS).minusDays(value * 7L);
+            case MONTHS -> LocalDate.of(date.getYear(), date.getMonthValue(), 1).minusMonths(value).atTime(0, 0, 0, 0);
+            case YEARS -> LocalDate.of(date.getYear(), 1, 1).minusYears(value).atTime(0, 0, 0, 0);
             default -> null;
         };
     }
@@ -582,9 +584,9 @@ public class LocalDateTimeUtil
             case MINUTES -> date.truncatedTo(ChronoUnit.MINUTES).plusMinutes(value);
             case HOURS -> date.truncatedTo(ChronoUnit.HOURS).plusHours(value);
             case DAYS -> date.truncatedTo(ChronoUnit.DAYS).plusDays(value);
-            case WEEKS -> date.truncatedTo(ChronoUnit.WEEKS).plusWeeks(value);
-            case MONTHS -> date.truncatedTo(ChronoUnit.MONTHS).plusMonths(value);
-            case YEARS -> date.truncatedTo(ChronoUnit.YEARS).plusYears(value);
+            case WEEKS -> date.with(TemporalAdjusters.previousOrSame(WEEK_FIELDS.getFirstDayOfWeek())).truncatedTo(ChronoUnit.DAYS).plusDays(value * 7L);
+            case MONTHS -> LocalDate.of(date.getYear(), date.getMonthValue(), 1).plusMonths(value).atTime(0, 0, 0, 0);
+            case YEARS -> LocalDate.of(date.getYear(), 1, 1).plusYears(value).atTime(0, 0, 0, 0);
             default -> null;
         };
     }
