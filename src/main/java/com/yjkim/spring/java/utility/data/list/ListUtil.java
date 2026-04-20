@@ -79,18 +79,16 @@ public class ListUtil
      * @param <T>
      * @return
      */
-    public static <T> List<T> makeMergedList (List<T> toList, List<T> fromList)
+    public static <T> List<T> makeMergedList(List<T> toList,List<T> fromList, UnaryOperator<T> copyFunction)
     {
         List<T> result = new ArrayList<>();
 
-        if (ObjectUtils.isNotEmpty(toList))
-        {
-            result = toList;
+        if (ObjectUtils.isNotEmpty(toList)) {
+            toList.stream().map(copyFunction).forEach(result::add);
         }
 
-        if (ObjectUtils.isNotEmpty(fromList))
-        {
-            result.addAll(fromList);
+        if (ObjectUtils.isNotEmpty(fromList)) {
+            fromList.stream().map(copyFunction).forEach(result::add);
         }
 
         return result;
