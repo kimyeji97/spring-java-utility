@@ -60,27 +60,36 @@ public class URLUtil
 
         try
         {
-            StringBuffer sb = new StringBuffer();
-            sb.append(key).append("=");
-            if (value != null)
-            {
-                sb.append(value);
-            }
-
             URI oldUri = new URI(uri);
 
-            String newQuery = oldUri.getQuery();
+            // getRawQuery()로 percent-encoding 원본 유지 (getQuery()는 디코딩하여 %26→& 등 손실 발생)
+            String existingQuery = oldUri.getRawQuery();
+            String newParam = key + "=" + (value != null ? value : "");
+            String newQuery;
 
-            if (newQuery == null)
+            if (existingQuery == null)
             {
-                newQuery = sb.toString();
-            } else
+                newQuery = newParam;
+            }
+            else
             {
-                newQuery += "&" + sb;
+                // 기존 파라미터 중 같은 key 제거 후 새 값 추가
+                String filteredQuery = Arrays.stream(existingQuery.split("&"))
+                        .filter(param -> !param.equals(key + "=")
+                                && !param.startsWith(key + "="))
+                        .collect(Collectors.joining("&"));
+
+                newQuery = filteredQuery.isEmpty() ? newParam : filteredQuery + "&" + newParam;
             }
 
-            return new URI(oldUri.getScheme(), oldUri.getAuthority(),
-                    oldUri.getPath(), newQuery, oldUri.getFragment()).toString();
+            // 다중 인자 URI 생성자는 query를 재인코딩하므로 raw 문자열로 직접 조립
+            StringBuilder result = new StringBuilder();
+            if (oldUri.getScheme() != null) result.append(oldUri.getScheme()).append("://");
+            if (oldUri.getRawAuthority() != null) result.append(oldUri.getRawAuthority());
+            if (oldUri.getRawPath() != null) result.append(oldUri.getRawPath());
+            result.append("?").append(newQuery);
+            if (oldUri.getRawFragment() != null) result.append("#").append(oldUri.getRawFragment());
+            return result.toString();
         } catch (URISyntaxException e)
         {
             log.error(e.getMessage(), e);
