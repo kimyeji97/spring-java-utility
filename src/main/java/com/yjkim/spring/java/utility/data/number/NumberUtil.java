@@ -107,10 +107,8 @@ public class NumberUtil {
      */
     public static int randomInRange (int start, int end)
     {
-        if (end <= start)
-        {
-            return -1;
-        }
+        if (end < start) return -1;
+        if (end == start) return end;
         return ThreadLocalRandom.current().nextInt(start, end + 1);
     }
 
